@@ -6,7 +6,7 @@ from kalman_lib import I2CDevice, twosComplement
 
 
 class Sensor(I2CDevice):    #inherits I2C device class
-	def __init__(self,sensor_type,address,registers,offset,measRange,bits):
+	def __init__(self,sensor_type,address,registers,zero,bits,sensitivity,max_voltage):
 		I2CDevice.__init__(self,address)
 		
 		#string saying what type just in case a method acts differently based on type
@@ -16,10 +16,11 @@ class Sensor(I2CDevice):    #inherits I2C device class
 		self.setLowHigh(registers)
 		
 		
-		self.measRange=measRange # measurement range as in range of +/-g's or +/-dps
-		self.offset=offset#digital value that corresponds to 0 degrees or 0 g's or 0 dps
+		
+		self.zero=zero#digital value that corresponds to 0 degrees or 0 g's or 0 dps
 		self.numBits=bits #bit 
-	
+		self.sensitivity=sensitivity # in volts/degree or volts/degree/second
+		self.maxV=max_voltage #the max_voltage the sensor can output (the input voltage)
 		self.previous=[0,0,0]   #[prevx,prevy,prevz]
 		self.coord_map={"x":0, "y":1,"z":2}
 		
@@ -69,4 +70,5 @@ class Sensor(I2CDevice):    #inherits I2C device class
 		self.low_pass=boolean
 	def setAlpha(self,new_alpha):
 		self.alpha=new_alpha
+	
 
