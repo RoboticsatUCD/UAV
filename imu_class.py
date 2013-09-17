@@ -65,12 +65,8 @@ class IMU(object):
 		#yaw rate from gyro
 		pass
 
-	def complimentaryFilter(self,gyro_angle,other_angle):
-		return (self.gyro_weight*gyro_angle+(1.0-self.gyro_weight)*other_angle)
 	
-	
-	def setCompFilter(self,boolean=True):
-		self.comp_filter=boolean
+
 		
 	
 	def getAngularRate(self,raw):
@@ -78,6 +74,7 @@ class IMU(object):
 		den=(gyro.sensitivity/gyro.maxV)*(2**(self.gyro.numBits)-1)  #units here are bits/degrees/second
 		return (raw-self.gyro.zero)/den 
 	#sets low pass filter for all the sensors
+	
 	def setLowPass(self,boolean=True):
 		for sensor in sensors:
 			sensor.setLowPass(boolean)
