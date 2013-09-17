@@ -16,7 +16,7 @@ class Sensor(I2CDevice):    #inherits I2C device class
 		self.setLowHigh(registers)
 		
 		
-		
+		#different for each axis?
 		self.zero=zero#digital value that corresponds to 0 degrees or 0 g's or 0 dps
 		self.numBits=bits #bit 
 		self.sensitivity=sensitivity # in volts/degree or volts/degree/second
@@ -26,6 +26,7 @@ class Sensor(I2CDevice):    #inherits I2C device class
 		
 		self.low_pass=True
 		self.alpha=1
+		
 	def setLowHigh(self,registers):
 		#user passes in a list of tuples with [(xlow, xhigh),(ylow,yhigh),...
 		#unpack tuples? (not needed?)

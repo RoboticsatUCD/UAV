@@ -32,40 +32,39 @@ class IMU(object):
 		#we could make this equal to an initial acceleromter measurement
 		self.gyro_roll_angle=0  
 	@property
-	def Yaw(self):
+	def yaw_angle(self):
+		#calculate yaw angle from compass or magnetometer
 		pass
+
 	@property
-	def Pitch(self):
+	def pitch_angle(self):
 		#calculate roll rate and then angle from roll rate
-		self.roll_rate=self.getAngularRate(self.gyro.yRaw)
-		self.gyro_roll_angle+=self.rollRate*self.delayms/1000 #or maybe just plug in the actual delay time  #angular velocity times dt is angle
-		
-		if self.comp_filter is True: #if client activates complimentatry filter
-			#calculate accelerometer angle
-			self.accel_roll_angle=degrees(atan2(self.accel.xRaw-self.accel.zero,sqrt((self.accel.yRaw-self.accel.zero)**2+(self.accel.zRaw-self.accel.zero)**2)))
-			#use filter with accelerometer and gyro angles
-			res=self.complimentaryFilter(self.gyro_roll_angle,self.accel_roll_angle)
-		else:
-			res=self.gyro_roll_angle
-		return res
+	
+			self.accel_pitch_angle=degrees(atan2(self.accel.xRaw-self.accel.zero,sqrt((self.accel.yRaw-self.accel.zero)**2+(self.accel.zRaw-self.accel.zero)**2)))
+			return self.accel_pitch_angle
+	
+	@property
+	def roll_angle(self):
+		self.accel_roll_angle=degrees(atan2(self.accel.yRaw-self.accel.zero,sqrt((self.accel.xRaw-self.accel.zero)**2+(self.accel.zRaw-self.accel.zero)**2)))
+		return self.accel_roll_angle
+
+	@property
+	def pitch_rate(self):
+		return self.getAngularRate(self.gyro.xRaw)
+		#angular rate of pitch motion from gyro
 		pass
+
 	@property
-	def Roll(self):
+	def roll_rate(self):
+		#angular roll rate from gyro
+		return self.getAngularRate(self.gyro.yRaw)
 		
-		#calculate roll rate and then angle from roll rate
-		self.roll_rate=self.getAngularRate(self.gyro.xRaw)
-		self.gyro_roll_angle+=self.rollRate*self.delayms/1000 #or maybe just plug in the actual delay time  #angular velocity times dt is angle
-		
-		if self.comp_filter is True: #if client activates complimentatry filter
-			#calculate accelerometer angle
-			self.accel_roll_angle=degrees(atan2(self.accel.yRaw-self.accel.zero,sqrt((self.accel.xRaw-self.accel.zero)**2+(self.accel.zRaw-self.accel.zero)**2)))
-			#use filter with accelerometer and gyro angles
-			res=self.complimentaryFilter(self.gyro_roll_angle,self.accel_roll_angle)
-		else:
-			res=self.gyro_roll_angle
-		return res
-	
-	
+
+	@property
+	def yaw_rate(self):
+		#yaw rate from gyro
+		pass
+
 	def complimentaryFilter(self,gyro_angle,other_angle):
 		return (self.gyro_weight*gyro_angle+(1.0-self.gyro_weight)*other_angle)
 	
@@ -82,5 +81,5 @@ class IMU(object):
 	def setLowPass(self,boolean=True):
 		for sensor in sensors:
 			sensor.setLowPass(boolean)
-	\
+	
 
