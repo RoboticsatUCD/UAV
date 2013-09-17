@@ -17,9 +17,9 @@ class Motor(object):
         self.min_speed=vmin
         self.max_speed=vmax
     #overloaded the += operator to increment speed
-    def __iadd__(self,increment):
+    """def __iadd__(self,increment):
         self.speed+=increment
-        self.speed=max(min(self.speed,self.max_speed),self.min_speed)
+        self.speed=max(min(self.speed,self.max_speed),self.min_speed)"""
     def setSpeed(self,speed):
         if speed<=self.max_speed or speed>=self.min_speed:
             self.speed=speed
