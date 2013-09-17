@@ -28,5 +28,5 @@ class PIDControl(object):
         u=self.P+self.I+self.D
         
         return u
-    def setSetPoint(self,setpoint):
+    def set_set_point(self,setpoint):
         self.setpoint=setpoint

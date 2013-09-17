@@ -28,12 +28,12 @@ class Motor(object):
             #raise error
         
     def go(self):
-        pulse=self.speedToPulse(self.speed)
+        pulse=self._speed_to_pulse(self.speed)
         #initPulse(port_number,speedToPulse(speed))
         #or
         PWM_MatchUpdate(LPC_PWM1, self.port, pulse, PWM_MATCH_UPDATE_OPT.PWM_MATCH_UPDATE_NEXT_RST)
        
-    def speedToPulse(self,speed):
+    def _speed_to_pulse(self,speed):
         if speed>=0 and speed<=100:
             return speed*10+1000
         else:
