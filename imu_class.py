@@ -23,26 +23,28 @@ class IMU(object):
 		sensors=[self.accel,self.gyro,self.compass];
 		
 		self.t=0
-		self.gyroWeight=0.9
-		self.alpha=0.5
+		
 		self.delayms=10
-		self.comp_filter=False
+		
 
 		#initialize to zero means we assume UAV horisontal at start
 		#we could make this equal to an initial acceleromter measurement
 		self.gyro_roll_angle=0  
+
+	#@todo compass stufff
 	@property
 	def yaw_angle(self):
 		#calculate yaw angle from compass or magnetometer
 		pass
 
+	#@todo clean up accel equations
 	@property
 	def pitch_angle(self):
 		#calculate roll rate and then angle from roll rate
 	
 			self.accel_pitch_angle=degrees(atan2(self.accel.xRaw-self.accel.zero,sqrt((self.accel.yRaw-self.accel.zero)**2+(self.accel.zRaw-self.accel.zero)**2)))
 			return self.accel_pitch_angle
-	
+	#@todo clean up accel equations
 	@property
 	def roll_angle(self):
 		self.accel_roll_angle=degrees(atan2(self.accel.yRaw-self.accel.zero,sqrt((self.accel.xRaw-self.accel.zero)**2+(self.accel.zRaw-self.accel.zero)**2)))
@@ -62,21 +64,22 @@ class IMU(object):
 
 	@property
 	def yaw_rate(self):
-		#yaw rate from gyro
-		pass
+		return self.getAngularRate(self.gyro.zRaw)
 
 	
 
 		
-	
+	#if its roll rate, the client will pass yraw and for pitch they will pass xraw
+	#general formula: desired_value=(raw-offset)*scale, where scale is conversion factor
+	#to get to units you want in desired_value
+	#@todo generalize this function to take any raw,offset and scale and give back a value?
 	def getAngularRate(self,raw):
-		#if its roll rate, the client will pass yraw and for pitch they will pass xraw
-		den=(gyro.sensitivity/gyro.maxV)*(2**(self.gyro.numBits)-1)  #units here are bits/degrees/second
-		return (raw-self.gyro.zero)/den 
+		scale=gyro.max_voltage/(gyro.sensitivity*gyro.max_adc_value) #units here are volts/((volts*adc_ints)/deg/sec)
+		return (raw-self.gyro.offset)*scale #units are deg/sec now
 	#sets low pass filter for all the sensors
 	
-	def setLowPass(self,boolean=True):
+	"""def setLowPass(self,boolean=True):
 		for sensor in sensors:
-			sensor.setLowPass(boolean)
+			sensor.setLowPass(boolean)"""
 	
 

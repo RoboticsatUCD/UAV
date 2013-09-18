@@ -6,7 +6,7 @@ from kalman_lib import I2CDevice, twosComplement
 
 
 class Sensor(I2CDevice):    #inherits I2C device class
-	def __init__(self,sensor_type,address,registers,zero,bits,sensitivity,max_voltage):
+	def __init__(self,sensor_type,address,registers,offset,bits,sensitivity,max_voltage):
 		I2CDevice.__init__(self,address)
 		
 		#string saying what type just in case a method acts differently based on type
@@ -17,16 +17,16 @@ class Sensor(I2CDevice):    #inherits I2C device class
 		
 		
 		#different for each axis?
-		self.zero=zero#digital value that corresponds to 0 degrees or 0 g's or 0 dps
+		self.offset=offset#digital value that corresponds to 0 degrees or 0 g's or 0 dps
 		self.numBits=bits #bit 
 		self.sensitivity=sensitivity # in volts/degree or volts/degree/second
-		self.maxV=max_voltage #the max_voltage the sensor can output (the input voltage)
+		self.max_voltage=max_voltage #the max_voltage the sensor can output (the input voltage)
 		self.previous=[0,0,0]   #[prevx,prevy,prevz]
 		self.coord_map={"x":0, "y":1,"z":2}
 		
 		self.low_pass=True
 		self.alpha=1
-		
+
 	def setLowHigh(self,registers):
 		#user passes in a list of tuples with [(xlow, xhigh),(ylow,yhigh),...
 		#unpack tuples? (not needed?)
@@ -41,7 +41,8 @@ class Sensor(I2CDevice):    #inherits I2C device class
 		if type is"compass":
 			reg=[reg[1],reg[0]]
 		
-		#super() with no arguments can be used in python 3
+		#super() with no arguments can be used in python 3 (
+		# super basically moves up the inheritance tree until it finds first definition of function
 		#returns raw value (basically combines the high byte and low byte of sensor register reading to make raw one value)
 		current=twosComplement(super(Sensor,self).readReg(reg[0]), super(Sensor,self).readReg(reg[1]))
 		
@@ -51,6 +52,7 @@ class Sensor(I2CDevice):    #inherits I2C device class
 			res=current
 		self.previous[index]=current
 		return res
+
 		#maybe assign to variable then return just for sake of looking back at last raw value?
 	@property
 	def xRaw(self):
@@ -62,14 +64,21 @@ class Sensor(I2CDevice):    #inherits I2C device class
 	@property
 	def zRaw(self):
 		return self.getRaw(self.z_reg,"z")
-	
-	def lowPassFilter(self,raw_meas,prev_meas):
+
+	@property
+	def max_adc_value(self):
+		return (2**(self.numBits)-1)
+
+		
+		#complimetary filter has built in LPF, so
+		#probably do not need this
+	"""def lowPassFilter(self,raw_meas,prev_meas):
 		#low pass filter
 		return raw_meas*self.alpha+(1.0-self.alpha)*self.prev_meas
 	
 	def setLowPass(self,boolean=True):
 		self.low_pass=boolean
 	def setAlpha(self,new_alpha):
-		self.alpha=new_alpha
+		self.alpha=new_alpha"""
 	
 
