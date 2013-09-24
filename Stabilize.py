@@ -7,12 +7,17 @@ from imu_class import IMU
 from sensor_class import Sensor
 
 
+#instantiate gyro, accel and compass objects then pass them to IMU
+gyro=sensor(......)
+accel=sensor(.....)
+compass=sensor(.....)
+
 delay=10
 IMU.delayms=delay
-MyImu=IMU(....)
+MyImu=IMU(accel,compass,gyro)
 MyKalman=KalmanFilter(....)
-@todo: interface with throttle
-    clean up
+#@todo: interface with throttle
+    #clean up
 motor1=motor(....)
 
 .
