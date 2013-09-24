@@ -1,4 +1,4 @@
-#Evan Racah
+ #Evan Racah
 #8/13/2013
 #Sensor Class -> Basically an abstraction of the I2CDevice class
 
@@ -16,17 +16,18 @@ class Sensor(I2CDevice):    #inherits I2C device class
 		self.setLowHigh(registers)
 		
 		
-		#different for each axis?
-		self.offset=offset#digital value that corresponds to 0 degrees or 0 g's or 0 dps
-		self.numBits=bits #bit 
-		self.sensitivity=sensitivity # in volts/degree or volts/degree/second
-		self.max_voltage=max_voltage #the max_voltage the sensor can output (the input voltage)
-		self.previous=[0,0,0]   #[prevx,prevy,prevz]
+		
+		#digital value that corresponds to 0 degrees or 0 g's or 0 dps (experimentally determined)
+		self.offset=offset
+		self.numBits=bits 
+		
+		#sensitivity in the data sheet for gyro is mdps/digit for accelerometer it is mg/digit, where g is accel due to gravity
+		self.sensitivity=sensitivity 
+		
+		#dict for ease of use in 
 		self.coord_map={"x":0, "y":1,"z":2}
 		
-		self.low_pass=True
-		self.alpha=1
-
+	
 	def setLowHigh(self,registers):
 		#user passes in a list of tuples with [(xlow, xhigh),(ylow,yhigh),...
 		#unpack tuples? (not needed?)
@@ -34,51 +35,37 @@ class Sensor(I2CDevice):    #inherits I2C device class
 		self.y_reg=registers[1]
 		self.z_reg=registers[2]
 
+  #reads reg for x low and x high then does twos complement to get full raw 16-bit value
 	def getRaw(self,reg,coord):
-		#reads reg for x low and x high then does twos complement to get 10 bit value
-		#does twos complement to get raw values
-		index=self.coord_map[coord]  #index for current coordinate for any lists that have [x,y,x] ie x is 0 y is 1 z is 2
+		
+		
 		if type is"compass":
 			reg=[reg[1],reg[0]]
 		
 		#super() with no arguments can be used in python 3 (
-		# super basically moves up the inheritance tree until it finds first definition of function
+		# super basically moves up the inheritance tree until it finds first definition of function (which should be in I2CDevice class)
 		#returns raw value (basically combines the high byte and low byte of sensor register reading to make raw one value)
-		current=twosComplement(super(Sensor,self).readReg(reg[0]), super(Sensor,self).readReg(reg[1]))
+		return twosComplement(super(Sensor,self).readReg(reg[0]), super(Sensor,self).readReg(reg[1]))
 		
-		if self.low_pass:
-			res=self.lowPassFilter(current,self.previous[index])
-		else:
-			res=current
-		self.previous[index]=current
-		return res
+		
 
-		#maybe assign to variable then return just for sake of looking back at last raw value?
+		#maybe assign to variable then return instead of just returnong for sake of looking back at last raw value?
 	@property
 	def xRaw(self):
-		return self.getRaw(self.x_reg,"x")
+		return self.getRaw(self.x_reg)
 		
 	@property
 	def yRaw(self):
-		return self.getRaw(self.y_reg,"y")
+		return self.getRaw(self.y_reg)
 	@property
 	def zRaw(self):
-		return self.getRaw(self.z_reg,"z")
+		return self.getRaw(self.z_reg)
 
 	@property
 	def max_adc_value(self):
 		return (2**(self.numBits)-1)
 
 		
-		#complimetary filter has built in LPF, so
-		#probably do not need this
-	"""def lowPassFilter(self,raw_meas,prev_meas):
-		#low pass filter
-		return raw_meas*self.alpha+(1.0-self.alpha)*self.prev_meas
 	
-	def setLowPass(self,boolean=True):
-		self.low_pass=boolean
-	def setAlpha(self,new_alpha):
-		self.alpha=new_alpha"""
 	
 
