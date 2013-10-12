@@ -23,30 +23,30 @@ class IMU(object):
 	def pitch_angle(self):
 		#calculate roll rate and then angle from roll rate
 	
-			self.accel_pitch_angle=degrees(atan2(self.accel.xRaw-self.accel.offset,sqrt((self.accel.yRaw-self.accel.offset)**2+(self.accel.zRaw-self.accel.offset)**2)))
+			self.accel_pitch_angle=degrees(atan2(self.accel.yRaw-self.accel.y_offset,sqrt((self.accel.xRaw-self.accel.x_offset)**2+(self.accel.zRaw-self.accel.z_offset)**2)))
 			return self.accel_pitch_angle
 
 	#@todo clean up accel equations
 	@property
 	def roll_angle(self):
-		self.accel_roll_angle=degrees(atan2(self.accel.yRaw-self.accel.offset,sqrt((self.accel.xRaw-self.accel.offset)**2+(self.accel.zRaw-self.accel.offset)**2)))
+		self.accel_roll_angle=degrees(atan2(self.accel.xRaw-self.accel.x_offset,self.accel.zraw-self.accel.z_offset))
 		return self.accel_roll_angle
 
 	@property
 	def pitch_rate(self):
-		return self.getAngularRate(self.gyro.xRaw)
+		return self.getAngularRate(self.gyro.xRaw,self.gyro.x_offset)
 		#angular rate of pitch motion from gyro
 		pass
 
 	@property
 	def roll_rate(self):
 		#angular roll rate from gyro
-		return self.getAngularRate(self.gyro.yRaw)
+		return self.getAngularRate(self.gyro.yRaw,self.gyro.y_offset)
 		
 
 	@property
 	def yaw_rate(self):
-		return self.getAngularRate(self.gyro.zRaw)
+		return self.getAngularRate(self.gyro.zRaw,self.gyro.z_offset)
 
 	
 
@@ -57,11 +57,11 @@ class IMU(object):
 	#a digit in a 16 bit number
 
 	#@todo generalize this function to take any raw,offset and scale and give back a value?
-	def getAngularRate(self,raw):
+	def getAngularRate(self,raw,offset):
 		#divide by 1000 because sensitivity in the data sheet for gyro is mdps/digit, so
 		#returns degrees per second (dps)
 		#gyro offset is same for all axes
-		return (raw-self.gyro.offset)*(gyro.sensitivity/1000) 
+		return (raw-offset)*(gyro.sensitivity/1000) 
 
 	
 	
