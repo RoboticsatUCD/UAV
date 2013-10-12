@@ -26,8 +26,8 @@ class Sensor(I2CDevice):    #inherits I2C device class
 		#sensitivity in the data sheet for gyro is mdps/digit for accelerometer it is mg/digit, where g is accel due to gravity
 		self.sensitivity=sensitivity 
 		
-		#dict for ease of use in 
-		self.coord_map={"x":0, "y":1,"z":2}
+		
+		
 		
 	
 	def setLowHigh(self,registers):
