@@ -38,7 +38,7 @@ class Sensor(I2CDevice):    #inherits I2C device class
 		self.z_reg=registers[2]
 
   #reads reg for x low and x high then does twos complement to get full raw 16-bit value
-	def getRaw(self,reg,coord):
+	def getRaw(self,reg):
 		
 		
 		if type is"compass":
