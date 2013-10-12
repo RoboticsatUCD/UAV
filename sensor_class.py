@@ -2,11 +2,13 @@
 #8/13/2013
 #Sensor Class -> Basically an abstraction of the I2CDevice class
 
-from kalman_lib import I2CDevice, twosComplement
+from I2C_Class import *
+from registers import *
+
 
 
 class Sensor(I2CDevice):    #inherits I2C device class
-	def __init__(self,sensor_type,address,registers,offset,bits,sensitivity,max_voltage):
+	def __init__(self,sensor_type,address,registers,offsets,bits,sensitivity):
 		I2CDevice.__init__(self,address)
 		
 		#string saying what type just in case a method acts differently based on type
@@ -18,7 +20,7 @@ class Sensor(I2CDevice):    #inherits I2C device class
 		
 		
 		#digital value that corresponds to 0 degrees or 0 g's or 0 dps (experimentally determined)
-		self.offset=offset
+		self.x_offset,self.y_offset,self.z_offset=offsets
 		self.numBits=bits 
 		
 		#sensitivity in the data sheet for gyro is mdps/digit for accelerometer it is mg/digit, where g is accel due to gravity
