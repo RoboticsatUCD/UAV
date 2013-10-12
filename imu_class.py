@@ -5,12 +5,12 @@ import time
 from math import *
 
 class IMU(object):
-	def __init__(self,accel, compass, gyro):
+	def __init__(self,accel,gyro):
 		
 		#copy over the three sensor objects
 		self.accel=accel
 		self.gyro=gyro
-		self.compass=compass
+		#self.compass=compass
 		
 	#@todo compass stufff
 	@property
@@ -29,7 +29,7 @@ class IMU(object):
 	#@todo clean up accel equations
 	@property
 	def roll_angle(self):
-		self.accel_roll_angle=degrees(atan2(self.accel.xRaw-self.accel.x_offset,self.accel.zraw-self.accel.z_offset))
+		self.accel_roll_angle=degrees(atan2((self.accel.xRaw-self.accel.x_offset),self.accel.zRaw-self.accel.z_offset))+180
 		return self.accel_roll_angle
 
 	@property

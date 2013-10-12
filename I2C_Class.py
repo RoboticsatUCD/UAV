@@ -45,7 +45,7 @@ class I2CDevice(object):
 			exit("I2C Verification Error")
 		return None
 
-		def twosComplement(low_byte, high_byte):
-	"""Unpack 16-bit twos complement representation of the result.
-	"""
-	return (((low_byte + (high_byte << 8)) + 2**15) % 2**16 - 2**15)
+def twosComplement(low_byte, high_byte):
+			"""Unpack 16-bit twos complement representation of the result.
+			"""
+			return (((low_byte + (high_byte << 8)) + 2**15) % 2**16 - 2**15)
