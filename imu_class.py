@@ -23,7 +23,8 @@ class IMU(object):
 	def pitch_angle(self):
 		#calculate roll rate and then angle from roll rate
 	
-			self.accel_pitch_angle=degrees(atan2(self.accel.yRaw-self.accel.y_offset,sqrt((self.accel.xRaw-self.accel.x_offset)**2+(self.accel.zRaw-self.accel.z_offset)**2)))
+			angle=degrees(atan2(self.accel.yRaw-self.accel.y_offset,sqrt((self.accel.xRaw-self.accel.x_offset)**2+(self.accel.zRaw-self.accel.z_offset)**2)))
+			self.accel_pitch_angle=abs(self.acc)
 			return self.accel_pitch_angle
 
 	#@todo clean up accel equations

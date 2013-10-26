@@ -13,7 +13,9 @@ from robovero.LPC17xx import LPC_I2C0
 from robovero.lpc_types import Status
 import time
 
-#(self,sensor_type,address,registers,offset,bits,sensitivity,max_voltage):
+
+
+#set addresses for each sensor
 gyro_addr=0x68
 accel_addr=0x18
 compass_addr=0x1E
@@ -29,6 +31,7 @@ gyro_regs=[(gyro_x_low,gyro_x_high),(gyro_y_low,gyro_y_high),(gyro_z_low,gyro_z_
 accel_regs=[(accel_x_low,accel_x_high),(accel_y_low,accel_y_high),(accel_z_low,accel_z_high)]
 accel_offsets=(-118,-551,910)
 offsets=(-118,-551,910)
+#(self,sensor_type,address,registers,offset,bits,sensitivity,max_voltage):
 accel=Sensor("accel",accel_addr,accel_regs,accel_offsets,16,0)
 accel.writeReg(accel_ctrl_reg1, 0x27)
 accel.writeReg(accel_ctrl_reg4, 0x00)
