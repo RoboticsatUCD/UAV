@@ -1,35 +1,19 @@
  #Evan Racah
 #8/13/2013
+
 #Sensor Class -> Basically an abstraction of the I2CDevice class
 
-from I2C_Class import *
+from I2C_Class import * #gets the I2C_Class and twoscomplement function
 from registers import *
 
 
 
 class Sensor(I2CDevice):    #inherits I2C device class
-	def __init__(self,sensor_type,address,registers,offsets,bits,sensitivity):
+	def __init__(self,address):
 		I2CDevice.__init__(self,address)
 		
-		#string saying what type just in case a method acts differently based on type
-		self.sensor_type=sensor_type
-
-		#set location of registers where low and high bytes are for the three axes
-		self.setLowHigh(registers)
-		
-		
-		
-		#digital value that corresponds to 0 degrees or 0 g's or 0 dps (experimentally determined)
-		self.x_offset,self.y_offset,self.z_offset=offsets
-		self.numBits=bits 
-		
-		#sensitivity in the data sheet for gyro is mdps/digit for accelerometer it is mg/digit, where g is accel due to gravity
-		self.sensitivity=sensitivity 
-		
-		
-		
-		
 	
+		
 	def setLowHigh(self,registers):
 		#user passes in a list of tuples with [(xlow, xhigh),(ylow,yhigh),...
 		#unpack tuples? (not needed?)
@@ -40,10 +24,7 @@ class Sensor(I2CDevice):    #inherits I2C device class
   #reads reg for x low and x high then does twos complement to get full raw 16-bit value
 	def getRaw(self,reg):
 		
-		
-		if type is"compass":
-			reg=[reg[1],reg[0]]
-		
+
 		#super() with no arguments can be used in python 3 (
 		# super basically moves up the inheritance tree until it finds first definition of function (which should be in I2CDevice class)
 		#returns raw value (basically combines the high byte and low byte of sensor register reading to make raw one value)
@@ -51,22 +32,8 @@ class Sensor(I2CDevice):    #inherits I2C device class
 		
 		
 
-		#maybe assign to variable then return instead of just returnong for sake of looking back at last raw value?
-	@property
-	def xRaw(self):
-		return self.getRaw(self.x_reg)
-		
-	@property
-	def yRaw(self):
-		return self.getRaw(self.y_reg)
-	@property
-	def zRaw(self):
-		return self.getRaw(self.z_reg)
 
-	@property
-	def max_adc_value(self):
-		return (2**(self.numBits)-1)
-
+	
 		
 	
 	
