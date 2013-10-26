@@ -36,4 +36,4 @@ gyro_fifo_ctrl_reg = 0x2E
 
 gyro_regs=[(gyro_x_low,gyro_x_high),(gyro_y_low,gyro_y_high),(gyro_z_low,gyro_z_high)]
 accel_regs=[(accel_x_low,accel_x_high),(accel_y_low,accel_y_high),(accel_z_low,accel_z_high)]
-compass_reg=[(compass_x_low,compass_x_high),(compass_y_low,compass_y_high),(compass_z_low,compass_z_high)]
+compass_regs=[(compass_x_low,compass_x_high),(compass_y_low,compass_y_high),(compass_z_low,compass_z_high)]
