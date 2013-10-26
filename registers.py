@@ -1,3 +1,8 @@
+
+gyro_addr=0x68
+accel_addr=0x18
+compass_addr=0x1E
+
 accel_ctrl_reg4 = 0x23
 accel_ctrl_reg1 = 0x20
 accel_x_low = 0x28
@@ -28,3 +33,7 @@ gyro_y_high = 0x2B
 gyro_z_low = 0x2C
 gyro_z_high = 0x2D
 gyro_fifo_ctrl_reg = 0x2E
+
+gyro_regs=[(gyro_x_low,gyro_x_high),(gyro_y_low,gyro_y_high),(gyro_z_low,gyro_z_high)]
+accel_regs=[(accel_x_low,accel_x_high),(accel_y_low,accel_y_high),(accel_z_low,accel_z_high)]
+compass_reg=[(compass_x_low,compass_x_high),(compass_y_low,compass_y_high),(compass_z_low,compass_z_high)]
