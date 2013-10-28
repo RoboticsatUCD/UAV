@@ -1,5 +1,7 @@
 #This class is from Sebastian Thrun's course, CS 373
 #Special thanks to him
+#Maybe just use numpy?
+
 class matrix:
     
     # implements basic operations of a matrix class
