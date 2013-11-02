@@ -1,8 +1,11 @@
+#header module for all the register addresses
+
 
 gyro_addr=0x68
 accel_addr=0x18
 compass_addr=0x1E
 
+accel_offsets=(-118,-551,910)
 accel_ctrl_reg4 = 0x23
 accel_ctrl_reg1 = 0x20
 accel_x_low = 0x28
