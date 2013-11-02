@@ -1,7 +1,6 @@
 from sensor_class import Sensor
 import time
-from math import 
-from
+from registers import *
 
 class Compass(Sensor):
 	def __init__(self,offsets,sensitivity,full_scale=1.3,address=compass_addr,registers=compass_regs):

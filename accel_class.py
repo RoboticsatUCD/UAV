@@ -1,7 +1,6 @@
 from sensor_class import Sensor
 import time
-from math import 
-from
+from registers import *
 
 class Accelerometer(Sensor):
 	def __init__(self,offsets,sensitivity,measurement_range=2,address=accel_addr,registers=accel_regs):

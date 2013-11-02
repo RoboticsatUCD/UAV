@@ -1,6 +1,5 @@
 from sensor_class import Sensor
 import time
-from math import 
 from registers import *
 
 class Gyroscope(Sensor):
