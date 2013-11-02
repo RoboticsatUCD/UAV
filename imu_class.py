@@ -1,15 +1,18 @@
 #Evan Racah
 #8/18/2013
-from sensor_class import Sensor
+from gyro_class import Gyroscope
+from accel_class import Accelerometer
+from compass_class import Compass
 import time
 from math import *
+from registers import accel_offsets
 
 class IMU(object):
-	def __init__(self,accel,gyro):
+	def __init__(self):
 		
 		#copy over the three sensor objects
-		self.accel=accel
-		self.gyro=gyro
+		self.accel=Accelerometer(accel_offsets)  #all other arguments default
+		self.gyro=Gyroscope(gyro_offsets)
 		#self.compass=compass
 		
 	#@todo compass stufff
@@ -22,9 +25,9 @@ class IMU(object):
 	@property
 	def pitch_angle(self):
 		#calculate roll rate and then angle from roll rate
-	
-			angle=degrees(atan2(self.accel.yRaw-self.accel.y_offset,sqrt((self.accel.xRaw-self.accel.x_offset)**2+(self.accel.zRaw-self.accel.z_offset)**2)))
-			self.accel_pitch_angle=abs(self.acc)
+			
+			self.accel_pitch_angle=degrees(atan2(self.accel.yRaw-self.accel.y_offset,sqrt((self.accel.xRaw-self.accel.x_offset)**2+(self.accel.zRaw-self.accel.z_offset)**2)))
+			
 			return self.accel_pitch_angle
 
 	#@todo clean up accel equations
