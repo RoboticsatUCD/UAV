@@ -3,10 +3,11 @@ import time
 from registers import *
 
 class Gyroscope(Sensor):
-	def __init__(self,offsets,sensitivity,full_scale=250,address=gyro_addr,registers=gyro_regs):
+	def __init__(self,offsets,full_scale=250,address=gyro_addr,registers=gyro_regs):
 		Sensor.__init__(self,address)
 
 		scale_map={250:0x0F,500:0x1F,2000:0x2F}  #relates full_scale value to register setup hex code for that value
+		sensitivity_map={250:8.75,500:17.5,2000:70}  #maps measurement range to sensitivity in milli-degrees/sec
 		
 		#set location of registers where low and high bytes are for the three axes
 		self.setLowHigh(registers)
@@ -16,7 +17,7 @@ class Gyroscope(Sensor):
 		self.numBits=bits 
 		
 		#sensitivity in the data sheet for gyro is mdps/digit
-		self.sensitivity=sensitivity
+		self.sensitivity=sensitivity_map[full_scale]
 
 		self.full_scale=full_scale
 
