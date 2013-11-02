@@ -14,5 +14,6 @@ class ComplemetaryFilter(object):
 		#of the angular velocity over the time step for the gyro and then using
 		#the accelerometer angle measurement to correct for gyro drift
 
+		#alpha*(angle+gyro*dt)+(1-alpha)*(accel)
 		self.angle=self.alpha*(self.angle+gyro_angle*self.time_step)+(1-self.alpha)*(accel_angle)
 		return self.angle
