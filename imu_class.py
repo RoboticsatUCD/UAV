@@ -12,7 +12,7 @@ class IMU(object):
 		
 		#copy over the three sensor objects
 		self.accel=Accelerometer(accel_offsets)  #all other arguments default
-		self.gyro=Gyroscope(gyro_offsets)
+		#self.gyro=Gyroscope(gyro_offsets)
 		#self.compass=compass
 		
 	#@todo compass stufff
