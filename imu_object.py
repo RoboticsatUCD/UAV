@@ -32,6 +32,9 @@ imu=IMU()
 
 
 while(1):
+	print "xRaw: ", imu.accel.xRaw
+	print "yRaw: ", imu.accel.yRaw
+	print "zRaw: ", imu.accel.zRaw
 	print "Roll: ",imu.roll_angle
 	print "Pitch: ",imu.pitch_angle
 	time.sleep(1)

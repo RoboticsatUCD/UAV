@@ -30,7 +30,7 @@ class Accelerometer(Sensor):
 		#set control registers
 	
 		super(Accelerometer,self).writeReg(accel_ctrl_reg1, 0x27)
-		super(Accelerometer,self).writeReg(accel_ctrl_reg4, self.range_map[2])
+		super(Accelerometer,self).writeReg(accel_ctrl_reg4, self.range_map[self.measurement_range])
 	@property
 	def xRaw(self):
 		return super(Accelerometer,self).getRaw(self.x_reg) #super(base,inherited) looks up the inheritance tree until it finds the function
