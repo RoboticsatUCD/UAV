@@ -12,7 +12,7 @@ class IMU(object):
 		
 		#copy over the three sensor objects
 		self.accel=Accelerometer(accel_offsets)  #all other arguments default
-		self.gyro=Gyroscope(gyro_offsets)
+		#self.gyro=Gyroscope(gyro_offsets)
 		#self.compass=compass
 		
 	#@todo compass stufff
@@ -34,6 +34,8 @@ class IMU(object):
 	@property
 	def roll_angle(self):
 		self.accel_roll_angle=degrees(atan2((self.accel.xRaw-self.accel.x_offset),self.accel.zRaw-self.accel.z_offset))+180
+		if self.accel_roll_angle > 180:
+			self.accel_roll_angle = self.accel_roll_angle -360
 		return self.accel_roll_angle
 
 	@property

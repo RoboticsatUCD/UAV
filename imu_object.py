@@ -16,9 +16,7 @@ import time
 
 
 #set addresses for each sensor
-gyro_addr=0x68
-accel_addr=0x18
-compass_addr=0x1E
+
 
 # Initialize pin select registers
 roboveroConfig()
@@ -27,6 +25,7 @@ roboveroConfig()
 
 
 #registers is list of three tuples for registers [(xlow,xhigh),(ylow,yhigh), etc]
+<<<<<<< HEAD
 
 accel_regs=[(accel_x_low,accel_x_high),(accel_y_low,accel_y_high),(accel_z_low,accel_z_high)]
 accel_offsets=(-118,-551,910)
@@ -42,17 +41,26 @@ gyro.writeReg(gyro_ctrl_reg3, 0x08) # enable DRDY
 gyro.writeReg(gyro_ctrl_reg4, 0x80) # enable block data read mode
 gyro.writeReg(gyro_ctrl_reg1, 0x0F) # normal mode, enable all axes, 250dps
 #todo create inherited classes for gyro, compass, accel
+=======
 
-imu=IMU(accel,gyro)
+imu=IMU()
+>>>>>>> b360148118a4be27c854783cd7757b7d41cf0666
 
 
 
-"""
+
 while(1):
+	print "xRaw: ", imu.accel.xRaw
+	print "yRaw: ", imu.accel.yRaw
+	print "zRaw: ", imu.accel.zRaw
 	print "Roll: ",imu.roll_angle
 	print "Pitch: ",imu.pitch_angle
-	time.sleep(1)"""
+	time.sleep(1)
 
+<<<<<<< HEAD
+=======
+"""
+>>>>>>> b360148118a4be27c854783cd7757b7d41cf0666
 def find_offset(sensor):
 	count=0
 	x_tot=0
@@ -78,3 +86,4 @@ def find_offset(sensor):
 
 find_offset()
 
+"""
