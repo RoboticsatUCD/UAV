@@ -23,7 +23,7 @@ class Motor(object):
             self.speed=speed
         else:
             pass
-            #raise error?
+            #raise error
         
     def go(self):
         pulse=self._speed_to_pulse(self.speed)
@@ -31,6 +31,11 @@ class Motor(object):
         #or
         PWM_MatchUpdate(LPC_PWM1, self.port, pulse, PWM_MATCH_UPDATE_OPT.PWM_MATCH_UPDATE_NEXT_RST)
        
+
+       #maps speed in percentage from 0 to 100 (max speed) to the correct pulse width
+       #for the motors
+       #@todo:
+       #probably should change this to be either in rpmstopulse or a byte 0-256 to pulse
     def _speed_to_pulse(self,speed):
         if speed>=0 and speed<=100:
             return speed*10+1000
