@@ -4,7 +4,7 @@ from registers import *
 
 #inherits sensor class
 class Accelerometer(Sensor):
-	def __init__(self,offsets,measurement_range=2,address=accel_addr,registers=accel_regs):
+	def __init__(self,offsets,measurement_range=2,address=accel_addr,registers=accel_regs,bits=16):
 		Sensor.__init__(self,address)
 		self.range_map={2:0x00,4:0x10,8:0x20}  #relates measurement_range value to register setup hex code for that value (2 and 4 is +/-2g and +/-4g respectively)
 		
@@ -13,7 +13,7 @@ class Accelerometer(Sensor):
 		
 		#digital value that corresponds 0 dps 
 		self.x_offset,self.y_offset,self.z_offset=offsets
-		self.numBits=16
+		self.numBits=bits
 		
 		#sensitivity in the data sheet for accel is mdps/digit
 		
