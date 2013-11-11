@@ -10,22 +10,20 @@ from robovero.extras import roboveroConfig, initMatch
 from robovero.lpc_types import FunctionalState
 
 from robovero.arduino import analogWrite, PWM1
+
 class Motor(object):
-    def __init__(self,port_number,vmin, vmax,speed=0):
+    def __init__(self,port_number,vmin,vmax,speed=0):
         self.port=port_number
         self.speed=speed
         self.min_speed=vmin
         self.max_speed=vmax
-    #overloaded the += operator to increment speed
-    """def __iadd__(self,increment):
-        self.speed+=increment
-        self.speed=max(min(self.speed,self.max_speed),self.min_speed)"""
+   
     def setSpeed(self,speed):
         if speed<=self.max_speed or speed>=self.min_speed:
             self.speed=speed
         else:
             pass
-            #raise error
+            #raise error?
         
     def go(self):
         pulse=self._speed_to_pulse(self.speed)
