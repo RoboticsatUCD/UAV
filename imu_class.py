@@ -5,14 +5,14 @@ from accel_class import Accelerometer
 from compass_class import Compass
 import time
 from math import *
-from registers import accel_offsets
+from registers import accel_offsets, gyro_offsets
 
 class IMU(object):
 	def __init__(self):
 		
 		#copy over the three sensor objects
 		self.accel=Accelerometer(accel_offsets)  #all other arguments default
-		#self.gyro=Gyroscope(gyro_offsets)
+		self.gyro=Gyroscope(gyro_offsets)
 		#self.compass=compass
 		
 	#@todo compass stufff
@@ -34,6 +34,7 @@ class IMU(object):
 	@property
 	def roll_angle(self):
 		self.accel_roll_angle=degrees(atan2((self.accel.xRaw-self.accel.x_offset),self.accel.zRaw-self.accel.z_offset))+180
+		#changes the roll so that its usual 180 degree range of normal rolling goes from -90 to 90 instead of 270 to 359.9/0 to 90 as before
 		if self.accel_roll_angle > 180:
 			self.accel_roll_angle = self.accel_roll_angle -360
 		return self.accel_roll_angle
@@ -67,7 +68,7 @@ class IMU(object):
 		#divide by 1000 because sensitivity in the data sheet for gyro is mdps/digit, so
 		#returns degrees per second (dps)
 		#gyro offset is same for all axes
-		return (raw-offset)*(gyro.sensitivity/1000) 
+		return (raw-offset)*(self.gyro.sensitivity/1000) 
 
 	
 	
