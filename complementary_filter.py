@@ -9,11 +9,11 @@ class ComplemetaryFilter(object):
 		self.angle=init_angle
 		self.time_step=time_step
 
-	def filter(self,accel_angle,gyro_angle):
+	def filter(self,accel_angle,gyro_rate):
 		#the filter recursively calculates the angle by adding to the angle the integration 
 		#of the angular velocity over the time step for the gyro and then using
 		#the accelerometer angle measurement to correct for gyro drift
 
 		#alpha*(angle+gyro*dt)+(1-alpha)*(accel)
-		self.angle=self.alpha*(self.angle+gyro_angle*self.time_step)+(1-self.alpha)*(accel_angle)
+		self.angle=self.alpha*(self.angle+gyro_rate*self.time_step)+(1-self.alpha)*(accel_angle)
 		return self.angle
