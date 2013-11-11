@@ -19,6 +19,7 @@ class I2CDevice(object):
 		self.config.sl_addr7bit = address
 		self.config.tx_data = self.tx_data.ptr
 		self.config.retransmissions_max = 3
+		
 
 	def readReg(self, register):
 		self.tx_data[0] = register
