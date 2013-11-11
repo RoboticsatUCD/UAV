@@ -5,9 +5,7 @@ from registers import *
 #inherits sensor class
 class Accelerometer(Sensor):
 	def __init__(self,offsets,measurement_range=2,address=accel_addr,registers=accel_regs):
-		print offsets, measurement_range, address, registers
 		Sensor.__init__(self,address)
-		print "init success"
 		self.range_map={2:0x00,4:0x10,8:0x20}  #relates measurement_range value to register setup hex code for that value (2 and 4 is +/-2g and +/-4g respectively)
 		
 		#set location of registers where low and high bytes are for the three axes

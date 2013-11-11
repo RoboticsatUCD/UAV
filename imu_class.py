@@ -34,6 +34,8 @@ class IMU(object):
 	@property
 	def roll_angle(self):
 		self.accel_roll_angle=degrees(atan2((self.accel.xRaw-self.accel.x_offset),self.accel.zRaw-self.accel.z_offset))+180
+		if self.accel_roll_angle > 180:
+			self.accel_roll_angle = self.accel_roll_angle -360
 		return self.accel_roll_angle
 
 	@property

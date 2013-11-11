@@ -13,7 +13,6 @@ import math
 
 class I2CDevice(object):
   def __init__(self, address):
-    print "I2C setup at address", address
     self.config = I2C_M_SETUP_Type()
     self.tx_data = Array(2, 1)
     self.rx_data = Array(1, 1)
