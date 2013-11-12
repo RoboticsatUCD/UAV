@@ -25,8 +25,26 @@ roboveroConfig()
 
 
 #registers is list of three tuples for registers [(xlow,xhigh),(ylow,yhigh), etc]
+<<<<<<< HEAD
+
+accel_regs=[(accel_x_low,accel_x_high),(accel_y_low,accel_y_high),(accel_z_low,accel_z_high)]
+accel_offsets=(-118,-551,910)
+gyro_offsets=(-118,-551,910)
+#(self,sensor_type,address,registers,offset,bits,sensitivity,max_voltage):
+accel=Sensor("accel",accel_addr,accel_regs,accel_offsets,16,0)
+accel.writeReg(accel_ctrl_reg1, 0x27)
+accel.writeReg(accel_ctrl_reg4, 0x00)
+
+
+gyro=Sensor("gyro",gyro_addr,gyro_regs,gyro_offsets,16,0)
+gyro.writeReg(gyro_ctrl_reg3, 0x08) # enable DRDY
+gyro.writeReg(gyro_ctrl_reg4, 0x80) # enable block data read mode
+gyro.writeReg(gyro_ctrl_reg1, 0x0F) # normal mode, enable all axes, 250dps
+#todo create inherited classes for gyro, compass, accel
+=======
 
 imu=IMU()
+>>>>>>> b360148118a4be27c854783cd7757b7d41cf0666
 
 
 
@@ -39,7 +57,10 @@ while(1):
 	print "Pitch: ",imu.pitch_angle
 	time.sleep(1)
 
+<<<<<<< HEAD
+=======
 """
+>>>>>>> b360148118a4be27c854783cd7757b7d41cf0666
 def find_offset(sensor):
 	count=0
 	x_tot=0
