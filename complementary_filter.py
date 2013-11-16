@@ -1,9 +1,9 @@
 #Evan Racah
 #10/27/13
 
-#Complemetary Filter Class
+#Complementary Filter Class
 #Will filter accelerometer and gyro angle measurements to give a filtered angle
-class ComplemetaryFilter(object):
+class ComplementaryFilter(object):
 	def __init__(self,alpha,init_angle,time_step):
 		self.alpha=alpha
 		self.angle=init_angle

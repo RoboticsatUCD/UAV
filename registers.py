@@ -6,7 +6,7 @@ accel_addr=0x18
 compass_addr=0x1E
 
 accel_offsets=(-410,-516,-181)
-gyro_offsets=(-410,-516,-181)
+gyro_offsets=(43,-14,-6)
 accel_ctrl_reg4 = 0x23
 accel_ctrl_reg1 = 0x20
 accel_x_low = 0x28

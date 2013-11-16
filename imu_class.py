@@ -43,7 +43,7 @@ class IMU(object):
 	def pitch_rate(self):
 		return self.getAngularRate(self.gyro.xRaw,self.gyro.x_offset)
 		#angular rate of pitch motion from gyro
-		pass
+		
 
 	@property
 	def roll_rate(self):

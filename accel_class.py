@@ -13,16 +13,20 @@ class Accelerometer(Sensor):
 		
 		#digital value that corresponds 0 dps 
 		self.x_offset,self.y_offset,self.z_offset=offsets
-		self.numBits=bits
+		self.numBits = bits
 		
 		#sensitivity in the data sheet for accel is mdps/digit
 		
 
-		self.measurement_range=measurement_range
+		self.measurement_range = measurement_range
 
 		#sets control registers for accel
 		
 		self.setReg()
+
+		self.x_Index = 0
+		self.y_Index = 2
+		self.z_Index = 4
 
 	def setReg(self):
 		#set control registers

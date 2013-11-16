@@ -12,7 +12,7 @@ class Sensor(I2CDevice):    #inherits I2C device class
 	def __init__(self,address):
 		I2CDevice.__init__(self,address)
 		
-	
+		#self.raw_values=super(Sensor,self).read6Reg(accel_x_low)
 		
 	def setLowHigh(self,registers):
 		#user passes in a list of tuples with [(xlow, xhigh),(ylow,yhigh),...
@@ -28,7 +28,12 @@ class Sensor(I2CDevice):    #inherits I2C device class
 		#super() with no arguments can be used in python 3 (
 		# super basically moves up the inheritance tree until it finds first definition of function (which should be in I2CDevice class)
 		#returns raw value (basically combines the high byte and low byte of sensor register reading to make raw one value)
+		
 		return twosComplement(super(Sensor,self).readReg(reg[0]), super(Sensor,self).readReg(reg[1]))
+		#if flag==1:
+			#self.raw_values=super(Sensor,self).read6Reg(accel_x_low)
+
+		#return twosComplement(self.raw_values[index], self.raw_values[index+1])
 		
 		
 
