@@ -13,7 +13,17 @@ class ComplementaryFilter(object):
 		#the filter recursively calculates the angle by adding to the angle the integration 
 		#of the angular velocity over the time step for the gyro and then using
 		#the accelerometer angle measurement to correct for gyro drift
-
 		#alpha*(angle+gyro*dt)+(1-alpha)*(accel)
 		self.angle=self.alpha*(self.angle+gyro_rate*self.time_step)+(1-self.alpha)*(accel_angle)
 		return self.angle
+
+
+class KalmanFilter(object):
+    def __init__(self):
+    	pass
+    	
+
+    def measure(Z):
+    	pass
+    def predict():
+    	pass
