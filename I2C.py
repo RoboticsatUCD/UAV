@@ -1,4 +1,5 @@
 #!/usr/bin/python
+"This code is written by Neil MacMunn and Danny Chan"
 
 from robovero.extras import Array, roboveroConfig
 from robovero.lpc17xx_i2c import I2C_M_SETUP_Type, I2C_MasterTransferData, \
