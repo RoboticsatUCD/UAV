@@ -1,0 +1,8 @@
+1) keep sensor class,
+2) make magnetometer class, overriding get_raw
+3) do filter class
+4) define sensor threshold
+5) figure out how to encode indexes for IMU rawValue()
+
+Abhinav:
+1) take look at motor class
