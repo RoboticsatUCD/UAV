@@ -41,6 +41,8 @@ gyro_fifo_ctrl_reg = 0x2E
 
 
 gyro_scale_map = {250:[0x0F, 8.75], 500:[0x1F, 17.5], 2000:[0x2F, 70]} 
+self.range_map = {2:0x00, 4:0x10, 8:0x20}  #relates measurement_range value to register address
+xyz_map = {'x': 0, 'y': 2, 'z': 4}
 """
 gyro_regs=[(gyro_x_low,gyro_x_high),(gyro_y_low,gyro_y_high),(gyro_z_low,gyro_z_high)]
 accel_regs=[(accel_x_low,accel_x_high),(accel_y_low,accel_y_high),(accel_z_low,accel_z_high)]
