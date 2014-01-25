@@ -6,6 +6,20 @@ import registers as rg
 from I2C import I2CDevice
 from I2C import twosComplement as tc
 
+from robovero.arduino import pinMode, digitalWrite, P1_0, OUTPUT
+def IMUInit():
+  """ Enable IMU by pulling IMU_EN low
+  """
+  pinMode(P1_0, OUTPUT)
+  digitalWrite(P1_0, 0)
+
+def IMUReset():
+  """ Reset IMU by pulling IMU_EN high and then lowp
+  """
+  pinMode(P1_0, OUTPUT)
+  digitalWrite(P1_0, 1)
+  digitalWrite(P1_0, 0)
+
 class Sensor(I2CDevice):    
 	def __init__(self, address, x_low):
 		I2CDevice.__init__(self, address)
@@ -13,7 +27,7 @@ class Sensor(I2CDevice):
 
 	def rawValue(self, index):
 		#if threshold time has passed update raw sensor values
-		if (t1 = time.clock()) - self.time_of_call > threshold:
+		if (t1 = time.clock()) - self.time_of_call > threshold: #TODO DEFINE
 			self.rawValues = self.getRaw(self.x_reg) 
 		return tc(self.rawValues[index], self.rawValues[index +1])
   
@@ -29,7 +43,7 @@ class Gyroscope(Sensor):
 	def __init__(self,address=gyro_addr,full_scale=250):
 		Sensor.__init__(self,address)
 		self.full_scale = full_scale
-		self.x_offset, self.y_offset, self.z_offset = offsets
+		self.x_offset, self.y_offset, self.z_offmagnetometerset = offsets
 		self.sensitivity = rg.gyro_scale_map[full_scale][1]
 		self.setReg()
 
@@ -68,8 +82,9 @@ class Accelerometer(Sensor):
 
 class IMU(object):
 	def __init__(self):
-		self.accel = Accelerometer(accel_offsets)  #all other arguments default
-		self.gyro = Gyroscope(gyro_offsets)
+		IMUInit();
+		self.accel = Accelerometer()  #all other arguments default
+		self.gyro = Gyroscope()
 		#self.compass=compass
 		
 
@@ -114,8 +129,3 @@ class IMU(object):
 	
 	def getAngularRate(self, raw, offset):
 		return (raw - offset) * (self.gyro.sensitivity / 1000) #divide by 1000 because sensitivity in milli-degrees/s
-
-	
-	
-	
-
