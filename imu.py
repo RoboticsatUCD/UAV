@@ -2,7 +2,7 @@
 #8/18/2013
 import time
 import math
-import registers as rg
+from registers import *
 from I2C import I2CDevice
 from I2C import twosComplement as tc
 
@@ -25,7 +25,8 @@ class Sensor(I2CDevice):
 		I2CDevice.__init__(self, address)
 		self.x_low = x_low
 
-	def rawValue(self, index):
+	def rawValue(self, coordinate):
+		index = xyz_map[coordinate]
 		#if threshold time has passed update raw sensor values
 		if (t1 = time.clock()) - self.time_of_call > threshold: #TODO DEFINE
 			self.rawValues = self.getRaw(self.x_reg) 
@@ -47,11 +48,14 @@ class Gyroscope(Sensor):
 		self.sensitivity = rg.gyro_scale_map[full_scale][1]
 		self.setReg()
 
+	def setOffsets(self,offsets):
+		self.x_offset, self.y_offset, self.z_offset = offsets
+
 	def setReg(self):
 		#set control registers
 		super(Gyroscope, self).writeReg(gyro_ctrl_reg3, 0x08) # enable DRDY
 		super(Gyroscope, self).writeReg(gyro_ctrl_reg4, 0x80) # enable block data read mode
-		super(Gyroscope, self).writeReg(gyro_ctrl_reg1, rg.gyro_scale_map[self.full_scale][0]) # normal mode, enable all axes
+		super(Gyroscope, self).writeReg(gyro_ctrl_reg1, gyro_scale_map[self.full_scale][0]) # normal mode, enable all axes
 
 
 ##################################
@@ -60,13 +64,12 @@ class Accelerometer(Sensor):
 	def __init__(self,offsets,measurement_range=2,address=accel_addr,registers=accel_regs,bits=16):
 		Sensor.__init__(self,address)
 		
-		self.range_map = {2:0x00, 4:0x10, 8:0x20}  #relates measurement_range value to register address
+		
 		super(Accelerometer,self).setLowHigh(registers) 
 		self.x_offset, self.y_offset, self.z_offset = offsets
-		self.numBits = bits
 		self.measurement_range = measurement_range
 		self.setReg()
-		self.x_Index, self.y_Index, self.z_Index = 0, 2, 4
+	
 	
 
 	def setReg(self):
@@ -83,11 +86,9 @@ class Accelerometer(Sensor):
 class IMU(object):
 	def __init__(self):
 		IMUInit();
-		self.accel = Accelerometer()  #all other arguments default
-		self.gyro = Gyroscope()
-		#self.compass=compass
+		self.accel = Accelerometer(accel_offsets)  #all other arguments default
+		self.gyro = Gyroscope(gyro_offsets, 250)
 		
-
 	@property
 	def yaw_angle(self):
 		#calculate yaw angle from compass or magnetometer
