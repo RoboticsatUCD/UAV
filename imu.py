@@ -6,7 +6,19 @@ from registers import *
 from I2C import I2CDevice
 from I2C import twosComplement as tc
 
+from robovero.arduino import pinMode, digitalWrite, P1_0, OUTPUT
+def IMUInit():
+  """ Enable IMU by pulling IMU_EN low
+  """
+  pinMode(P1_0, OUTPUT)
+  digitalWrite(P1_0, 0)
 
+def IMUReset():
+  """ Reset IMU by pulling IMU_EN high and then lowp
+  """
+  pinMode(P1_0, OUTPUT)
+  digitalWrite(P1_0, 1)
+  digitalWrite(P1_0, 0)
 
 class Sensor(I2CDevice):    
 	def __init__(self, address, x_low):
@@ -21,7 +33,7 @@ class Sensor(I2CDevice):
 	def rawValue(self, coordinate):
 		index = xyz_map[coordinate]
 		#if threshold time has passed update raw sensor values
-		if (t1 = time.clock()) - self.time_of_call > threshold:
+		if (t1 = time.clock()) - self.time_of_call > threshold: #TODO DEFINE
 			self.rawValues = self.getRaw(self.x_reg) 
 		return tc(self.rawValues[index], self.rawValues[index +1])
   
@@ -80,10 +92,9 @@ class Accelerometer(Sensor):
 
 class IMU(object):
 	def __init__(self):
-		#these two constructors should be called when the uav is level in order to calculate offset
-		self.accel = Accelerometer()  #all other arguments default
-		self.gyro = Gyroscope()
-	
+		IMUInit();
+		self.accel = Accelerometer(accel_offsets)  #all other arguments default
+		self.gyro = Gyroscope(gyro_offsets, 250)
 		
 		
 	@property
@@ -127,8 +138,3 @@ class IMU(object):
 	
 	def getAngularRate(self, raw, offset):
 		return (raw - offset) * (self.gyro.sensitivity / 1000) #divide by 1000 because sensitivity in milli-degrees/s
-
-	
-	
-	
-

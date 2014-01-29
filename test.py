@@ -17,7 +17,6 @@ time_step = 10./1000.
 
 myIMU=IMU()
 
-""
 while(1):
 	t1 = time.clock()
 	print myIMU.roll_angle
@@ -96,4 +95,3 @@ def find_offset(sensor):
 
 find_offset(gyro)
 """
-
