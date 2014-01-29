@@ -6,6 +6,8 @@ from registers import *
 from I2C import I2CDevice
 from I2C import twosComplement as tc
 
+
+
 class Sensor(I2CDevice):    
 	def __init__(self, address, x_low):
 		I2CDevice.__init__(self, address)
@@ -23,6 +25,18 @@ class Sensor(I2CDevice):
 		#super() with no arguments can be used in python 3
 		return super(Sensor,self).read6Reg(self.x_low)
 		
+	def setOffsets(self,offsets=[0,0,0]):
+		self.x_offset, self.y_offset, self.z_offset = offsets
+
+	def calcOffsets(self, trials=10):
+		xTot, yTot, zTot = 0
+		for trial in range(trials):
+			xTot += self.rawValue('x')
+			yTot += self.rawValue('y')
+			zTot += self.rawValue('z')
+			time.sleep(1)
+		self.setOffsets([tot / trials for tot in [xTot, yTot, zTot]])
+
 
 
 ################################		
@@ -32,9 +46,7 @@ class Gyroscope(Sensor):
 		self.full_scale = full_scale
 		self.sensitivity = gyro_scale_map[self.full_scale][1]
 		self.setReg()
-
-	def setOffsets(self,offsets):
-		self.x_offset, self.y_offset, self.z_offset = offsets
+		super(Gyroscope, self).Offsets()
 
 	def setReg(self):
 		#set control registers
@@ -46,34 +58,28 @@ class Gyroscope(Sensor):
 ##################################
 
 class Accelerometer(Sensor):
-	def __init__(self,offsets,measurement_range=2,address=accel_addr,registers=accel_regs,bits=16):
+	def __init__(self, address=accel_addr, measurement_range=2):
 		Sensor.__init__(self,address)
-		
-		
-		super(Accelerometer,self).setLowHigh(registers) 
-		self.x_offset, self.y_offset, self.z_offset = offsets
 		self.measurement_range = measurement_range
 		self.setReg()
+		super(Accelerometer, self).calcOffsets()
 	
 	
-
 	def setReg(self):
 		#set control registers
 		super(Accelerometer, self).writeReg(accel_ctrl_reg1, 0x27)
 		super(Accelerometer, self).writeReg(accel_ctrl_reg4, self.range_map[self.measurement_range])
 
 
-	def setOffset(self, offsets):
-		self.x_offset, self.y_offset, self.z_offset = offsets
-
 #########################################	
 
 class IMU(object):
 	def __init__(self):
-		self.accel = Accelerometer(accel_offsets)  #all other arguments default
-		self.gyro = Gyroscope(gyro_offsets, 250)
-		#gyro.setOffsets(...)
-		gyro.
+		#these two constructors should be called when the uav is level in order to calculate offset
+		self.accel = Accelerometer()  #all other arguments default
+		self.gyro = Gyroscope()
+	
+		
 		
 	@property
 	def yaw_angle(self):
