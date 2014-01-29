@@ -13,6 +13,11 @@ class Sensor(I2CDevice):
 		I2CDevice.__init__(self, address)
 		self.x_low = x_low
 
+	def read6Reg_fake(self, x_low, registerz=6):
+	"fake read6Reg emulator that just returns random values in range for the registers"
+		max = (2**16) / 2
+		return [randint(-max,max) for _ in range(registerz)]
+
 	def rawValue(self, coordinate):
 		index = xyz_map[coordinate]
 		#if threshold time has passed update raw sensor values
@@ -23,7 +28,7 @@ class Sensor(I2CDevice):
 	def getRaw(self,reg):
 		self.time_of_call = time.clock()
 		#super() with no arguments can be used in python 3
-		return super(Sensor,self).read6Reg(self.x_low)
+		return super(Sensor,self).read6Reg_fake(self.x_low)
 		
 	def setOffsets(self,offsets=[0,0,0]):
 		self.x_offset, self.y_offset, self.z_offset = offsets
