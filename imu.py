@@ -2,45 +2,44 @@
 #8/18/2013
 import time
 import math
+import random
 from registers import *
-from I2C import I2CDevice
-from I2C import twosComplement as tc
+#from I2C import I2CDevice
+#from I2C import twosComplement as tc
 
-from robovero.arduino import pinMode, digitalWrite, P1_0, OUTPUT
+"""from robovero.arduino import pinMode, digitalWrite, P1_0, OUTPUT
 def IMUInit():
-  """ Enable IMU by pulling IMU_EN low
-  """
+  Enable IMU by pulling IMU_EN lowx
   pinMode(P1_0, OUTPUT)
   digitalWrite(P1_0, 0)
 
 def IMUReset():
-  """ Reset IMU by pulling IMU_EN high and then lowp
-  """
+  Reset IMU by pulling IMU_EN high and then lowp
   pinMode(P1_0, OUTPUT)
   digitalWrite(P1_0, 1)
-  digitalWrite(P1_0, 0)
+  digitalWrite(P1_0, 0)"""
 
-class Sensor(I2CDevice):    
+class Sensor(object):  #I2CDevice   
 	def __init__(self, address, x_low):
-		I2CDevice.__init__(self, address)
+		#I2CDevice.__init__(self, address)
 		self.x_low = x_low
 
 	def read6Reg_fake(self, x_low, registerz=6):
-	"fake read6Reg emulator that just returns random values in range for the registers"
-		max = (2**16) / 2
-		return [randint(-max,max) for _ in range(registerz)]
+		"""fake read6Reg emulator that just returns random values in range for the registers"""
+		max = (2**10) / 2
+		return [random.randint(-max,max) for _ in range(registerz)]
 
 	def rawValue(self, coordinate):
 		index = xyz_map[coordinate]
 		#if threshold time has passed update raw sensor values
-		if (t1 = time.clock()) - self.time_of_call > threshold: #TODO DEFINE
-			self.rawValues = self.getRaw(self.x_reg) 
+		if (t1 == time.clock()) - self.time_of_call > threshold: #TODO DEFINE
+			self.rawValues = self.getRaw() 
 		return tc(self.rawValues[index], self.rawValues[index +1])
   
-	def getRaw(self,reg):
+	def getRaw(self):
 		self.time_of_call = time.clock()
 		#super() with no arguments can be used in python 3
-		return super(Sensor,self).read6Reg_fake(self.x_low)
+		return self.read6Reg_fake(self.x_low) #super(Sensor,self)
 		
 	def setOffsets(self,offsets=[0,0,0]):
 		self.x_offset, self.y_offset, self.z_offset = offsets
@@ -93,8 +92,8 @@ class Accelerometer(Sensor):
 class IMU(object):
 	def __init__(self):
 		IMUInit();
-		self.accel = Accelerometer(accel_offsets)  #all other arguments default
-		self.gyro = Gyroscope(gyro_offsets, 250)
+		self.accel = Accelerometer()  #all other arguments default
+		self.gyro = Gyroscope()
 		
 		
 	@property
@@ -138,3 +137,9 @@ class IMU(object):
 	
 	def getAngularRate(self, raw, offset):
 		return (raw - offset) * (self.gyro.sensitivity / 1000) #divide by 1000 because sensitivity in milli-degrees/s
+
+
+if __name__=="__main__":
+	sens = Sensor(0,0)
+	print sens.getRaw()
+
