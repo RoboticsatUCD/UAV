@@ -42,7 +42,7 @@ class Sensor(I2CDevice):
 ################################		
 class Gyroscope(Sensor):
 	def __init__(self,address=gyro_addr,full_scale=250):
-		Sensor.__init__(self,address)
+		Sensor.__init__(self,address, gyro_x_low)
 		self.full_scale = full_scale
 		self.x_offset, self.y_offset, self.z_offmagnetometerset = offsets
 		self.sensitivity = rg.gyro_scale_map[full_scale][1]
@@ -61,9 +61,9 @@ class Gyroscope(Sensor):
 ##################################
 
 class Accelerometer(Sensor):
-	def __init__(self,offsets,measurement_range=2,address=accel_addr,registers=accel_regs,bits=16):
-		Sensor.__init__(self,address)
-		super(Accelerometer,self).setLowHigh(registers) 
+	def __init__(self,offsets,measurement_range=2,address=accel_addr):
+		Sensor.__init__(self,address, accel_x_low)
+		#super(Accelerometer,self).setLowHigh(registers) Evan: leftover from old code architecture?
 		self.x_offset, self.y_offset, self.z_offset = offsets
 		self.measurement_range = measurement_range
 		self.setReg()
@@ -73,7 +73,7 @@ class Accelerometer(Sensor):
 	def setReg(self):
 		#set control registers
 		super(Accelerometer, self).writeReg(accel_ctrl_reg1, 0x27)
-		super(Accelerometer, self).writeReg(accel_ctrl_reg4, self.range_map[self.measurement_range])
+		super(Accelerometer, self).writeReg(accel_ctrl_reg4, range_map[self.measurement_range])
 
 
 	def setOffset(self, offsets):
