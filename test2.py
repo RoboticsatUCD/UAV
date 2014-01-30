@@ -1,15 +1,8 @@
 #Evan Racah
 #9/18/2013
 #Initialize IMU object to be used from this module
-from imu import Sensor, IMU
-from I2C import *
-from registers import *
-from robovero.extras import Array, roboveroConfig
-from robovero.lpc17xx_i2c import I2C_M_SETUP_Type, I2C_MasterTransferData, \
-                            I2C_TRANSFER_OPT_Type
-from robovero.lpc17xx_gpio import GPIO_ReadValue
-from robovero.LPC17xx import LPC_I2C0
-from robovero.lpc_types import Status
+from imu import IMU
+from robovero.extras import roboveroConfig
 import time
 
 

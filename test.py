@@ -24,10 +24,6 @@ while(1):
 	t2 = time.clock()
 	print "time: ", t2-t1
 
-
-#myIMU=IMU()  #instantiate IMU -> it does not take any data
-
-
 """
 while(1):
 	print "roll", myIMU.roll_rate

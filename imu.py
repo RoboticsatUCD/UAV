@@ -28,7 +28,7 @@ class Sensor(I2CDevice):
 	def rawValue(self, coordinate):
 		index = xyz_map[coordinate]
 		#if threshold time has passed update raw sensor values
-		if (t1 = time.clock()) - self.time_of_call > threshold: #TODO DEFINE
+		if (time.clock() - self.time_of_call > 100): #TODO DEFINE
 			self.rawValues = self.getRaw(self.x_reg) 
 		return tc(self.rawValues[index], self.rawValues[index +1])
   
@@ -63,8 +63,6 @@ class Gyroscope(Sensor):
 class Accelerometer(Sensor):
 	def __init__(self,offsets,measurement_range=2,address=accel_addr,registers=accel_regs,bits=16):
 		Sensor.__init__(self,address)
-		
-		
 		super(Accelerometer,self).setLowHigh(registers) 
 		self.x_offset, self.y_offset, self.z_offset = offsets
 		self.measurement_range = measurement_range
