@@ -19,12 +19,12 @@ imu=IMU()
 #registers is list of three tuples for registers [(xlow,xhigh),(ylow,yhigh), etc]
 
 while(1):
-	print "Roll: ", imu.roll_angle()
-	print "Pitch: ",imu.pitch_angle()
-	print "Roll rate: ", imu.roll_rate()
-	print "Pitch rate: ",imu.pitch_rate()
+	print "Roll: ", imu.roll_angle
+	print "Pitch: ",imu.pitch_angle
+	print "Roll rate: ", imu.roll_rate
+	print "Pitch rate: ",imu.pitch_rate
 	
-	time.sleep(0.5)
+	#time.sleep(0.05)
 
 """
 def find_offset(sensor):
