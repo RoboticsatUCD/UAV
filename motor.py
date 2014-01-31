@@ -1,5 +1,5 @@
 #Evan Racah
-from custom_servo import initPulse, initPeriod, initPWM
+#from custom_servo import initPulse, initPeriod, initPWM
 
 from robovero.LPC17xx import LPC_PWM1
 from robovero.lpc17xx_pwm import PWM_TC_MODE_OPT, \
@@ -11,34 +11,37 @@ from robovero.lpc_types import FunctionalState
 
 from robovero.arduino import analogWrite, PWM1
 
+def initPulse(channel, pulse_width):
+    initMatch(channel, pulse_width)
+    
+def initPeriod(period):
+    initMatch(0, period)
+
 class Motor(object):
-    def __init__(self,port_number,vmin,vmax,speed=0):
+    initialized = 0;
+    def __init__(self,port_number,vmin=0,vmax=1000,speed=0):
         self.port=port_number
         self.speed=speed
         self.min_speed=vmin
         self.max_speed=vmax
-   
+        if(Motor.initialized==0):
+            Motor.initialized=1
+            initPeriod(20000)
+            initPulse(port_number, 1000)
+            PWM_ChannelCmd(LPC_PWM1, port_number, FunctionalState.ENABLE)
+            PWM_ResetCounter(LPC_PWM1)
+            PWM_CounterCmd(LPC_PWM1, FunctionalState.ENABLE)
+            PWM_Cmd(LPC_PWM1, FunctionalState.ENABLE)
+            print "PWM module + motor initialized!"
+        else:
+            PWM_ChannelCmd(LPC_PWM1, port_number, FunctionalState.ENABLE)
+            print "Motor initialized!"
+
     def setSpeed(self,speed):
         if speed<=self.max_speed or speed>=self.min_speed:
             self.speed=speed
         else:
-            pass
-            #raise error
-        
-    def go(self):
-        pulse=self._speed_to_pulse(self.speed)
-        #initPulse(port_number,speedToPulse(speed))
-        #or
-        PWM_MatchUpdate(LPC_PWM1, self.port, pulse, PWM_MATCH_UPDATE_OPT.PWM_MATCH_UPDATE_NEXT_RST)
-       
+            print "Invalid speed of: " + speed + ", using previous speed of: " + self.speed
 
-       #maps speed in percentage from 0 to 100 (max speed) to the correct pulse width
-       #for the motors
-       #@todo:
-       #probably should change this to be either in rpmstopulse or a byte 0-256 to pulse
-    def _speed_to_pulse(self,speed):
-        if speed>=0 and speed<=100:
-            return speed*10+1000
-        else:
-            pass
-            #raise error
+    def go(self):
+        PWM_MatchUpdate(LPC_PWM1, self.port, self.speed+1000, PWM_MATCH_UPDATE_OPT.PWM_MATCH_UPDATE_NEXT_RST)

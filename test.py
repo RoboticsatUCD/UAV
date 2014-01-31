@@ -17,17 +17,12 @@ time_step = 10./1000.
 
 myIMU=IMU()
 
-""
 while(1):
 	t1 = time.clock()
 	print myIMU.roll_angle
 	print myIMU.pitch_angle
 	t2 = time.clock()
 	print "time: ", t2-t1
-
-
-#myIMU=IMU()  #instantiate IMU -> it does not take any data
-
 
 """
 while(1):
@@ -96,4 +91,3 @@ def find_offset(sensor):
 
 find_offset(gyro)
 """
-

@@ -3,10 +3,12 @@ Created on Aug 20, 2013
 
 @author: ejracah
 '''
+import time
+
 class PIDControl(object):
-    def __init__(self,delay,setpoint,Kp,Ki=0,Kd=0):
+    def __init__(self,setpoint,Kp,Ki=0,Kd=0):
         self.setpoint=setpoint
-        self.dt=delay
+        self.t1 = time.clock()
         self.Kp=Kp
         self.Kd=Kd
         self.Ki=Ki
@@ -20,7 +22,9 @@ class PIDControl(object):
         self.errorTotal=self.error_total+self.error
         self.de=self.error-self.error_prev
         self.error_prev=self.error
-        
+        self.dt = time.clock() - self.t1
+        t1 = time.clock()
+
         self.P=self.Kp*self.error
         self.I=self.Ki*self.error_total*self.dt
         self.D=self.Kd*self.de/self.dt
@@ -28,5 +32,6 @@ class PIDControl(object):
         u=self.P+self.I+self.D
         
         return u
+
     def set_set_point(self,setpoint):
         self.setpoint=setpoint

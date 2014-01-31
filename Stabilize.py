@@ -3,7 +3,7 @@ Created on Aug 15, 2013
 
 @author: ejracah
 '''
-from imu_class import IMU
+from imu import IMU
 from sensor_class import Sensor
 
 
