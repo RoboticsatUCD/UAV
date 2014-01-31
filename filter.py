@@ -11,7 +11,7 @@ class ComplementaryFilter(object):
 		self.time_step=time_step
 		self.t1 = time.clock()
 
-	def filter(self,accel_angle,gyro_rate):
+	def filter(self,accel_angle,gyro_rate):#should call once for each axis
 		#the filter recursively calculates the angle by adding to the angle the integration 
 		#of the angular velocity over the time step for the gyro and then using
 		#the accelerometer angle measurement to correct for gyro drift
