@@ -18,10 +18,10 @@ time_step = 10./1000.
 myIMU=IMU()
 
 while(1):
-	t1 = time.clock()
+	t1 = time.time()
 	print myIMU.roll_angle
 	print myIMU.pitch_angle
-	t2 = time.clock()
+	t2 = time.time()
 	print "time: ", t2-t1
 
 """

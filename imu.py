@@ -28,12 +28,12 @@ class Sensor(I2CDevice):
 	def rawValue(self, coordinate):
 		index = xyz_map[coordinate]
 		#if threshold time has passed update raw sensor values
-		if (time.clock() - self.time_of_call > 0.0001): #TODO DEFINE
+		if (time.time() - self.time_of_call > 0.0001): #TODO DEFINE
 			self.rawValues = self.getRaw() 
 		return tc(self.rawValues[index], self.rawValues[index +1])
   
 	def getRaw(self):
-		self.time_of_call = time.clock()
+		self.time_of_call = time.time()
 		#super() with no arguments can be used in python 3
 		return super(Sensor,self).read6Reg(self.x_low)
 		
@@ -127,3 +127,5 @@ class IMU(object):
 	
 	def getAngularRate(self, raw, offset):
 		return (raw - offset) * (self.gyro.sensitivity / 1000) #divide by 1000 because sensitivity in milli-degrees/s
+	#def calibrate(targetX, targetY, targetZ):
+		

@@ -4,7 +4,7 @@
 from imu import IMU
 from robovero.extras import roboveroConfig
 import time
-
+from ComplementaryFilter import ComplementaryFilter
 
 
 #set addresses for each sensor
@@ -15,16 +15,20 @@ roboveroConfig()
 
 # Initialize IMU
 imu=IMU()
-
+#imu.calibrate(0, 0, -1)
+cfRoll=ComplementaryFilter()
+cfPitch=ComplementaryFilter()
 #registers is list of three tuples for registers [(xlow,xhigh),(ylow,yhigh), etc]
+string = ""
 
 while(1):
-	print "Roll: ", imu.roll_angle
-	print "Pitch: ",imu.pitch_angle
-	print "Roll rate: ", imu.roll_rate
-	print "Pitch rate: ",imu.pitch_rate
-	
-	#time.sleep(0.05)
+	string = "Roll: " + str(imu.roll_angle)
+	string += "\nPitch: " + str(imu.pitch_angle)
+	string += "\nRoll rate: " + str(imu.roll_rate)
+	string += "\nPitch rate: " + str(imu.pitch_rate)
+	string += "\nfrom filter Roll: " + str(cfRoll.filter(imu.roll_angle, imu.roll_rate))
+	string += "\nfrom filter Pitch: " + str(cfPitch.filter(imu.pitch_angle, imu.pitch_rate)) 
+	print string
 
 """
 def find_offset(sensor):
