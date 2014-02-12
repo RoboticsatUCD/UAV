@@ -7,7 +7,7 @@ from registers import *
 #from I2C import I2CDevice
 #from I2C import twosComplement as tc
 
-from robovero.arduino import pinMode, digitalWrite, P1_0, OUTPUT
+#from robovero.arduino import pinMode, digitalWrite, P1_0, OUTPUT
 def IMUInit():
   #Enable IMU by pulling IMU_EN lowx
   pinMode(P1_0, OUTPUT)
@@ -19,39 +19,47 @@ def IMUReset():
   digitalWrite(P1_0, 1)
   digitalWrite(P1_0, 0)
 
+def twosComplement(low_byte, high_byte):
+			"""Unpack 16-bit twos complement representation of the result.
+			"""
+			return (((low_byte + (high_byte << 8)) + 2**15) % 2**16 - 2**15)
+
 class Sensor(object):  #I2CDevice   
 	def __init__(self, address, x_low):
 		#I2CDevice.__init__(self, address)
 		self.x_low = x_low
+		self.time_of_call = time.time() #must be initially set for the first rawValue call
+		self.rawValues = self.getRaw()
+
 
 	def read6Reg_fake(self, x_low, registerz=6):
 		"""fake read6Reg emulator that just returns random values in range for the registers"""
 		max = (2**10) / 2
-		return [random.randint(-max,max) for _ in range(registerz)]
+		return [int(random.gauss(0, max / 3)) for _ in range(registerz)]
 
 	def rawValue(self, coordinate):
 		index = xyz_map[coordinate]
 		#if threshold time has passed update raw sensor values
-		if (t1 == time.clock()) - self.time_of_call > threshold: #TODO DEFINE
-		if (time.clock() - self.time_of_call > 0.0001): #TODO DEFINE
+		if (time.time() - self.time_of_call > 0.0001): #TODO DEFINE
 			self.rawValues = self.getRaw() 
-		return tc(self.rawValues[index], self.rawValues[index +1])
+		return twosComplement(self.rawValues[index], self.rawValues[index +1])
   
 	def getRaw(self):
-		self.time_of_call = time.clock()
+		self.time_of_call = time.time()
 		#super() with no arguments can be used in python 3
 		return self.read6Reg_fake(self.x_low) #super(Sensor,self)
 		
 	def setOffsets(self,offsets=[0,0,0]):
+		print offsets
 		self.x_offset, self.y_offset, self.z_offset = offsets
 
 	def calcOffsets(self, trials=10):
-		xTot, yTot, zTot = 0
+		xTot, yTot, zTot = [0, 0, 0]
 		for trial in range(trials):
 			xTot += self.rawValue('x')
 			yTot += self.rawValue('y')
 			zTot += self.rawValue('z')
-			time.sleep(1)
+			
 		self.setOffsets([tot / trials for tot in [xTot, yTot, zTot]])
 
 
@@ -61,13 +69,11 @@ class Gyroscope(Sensor):
 	def __init__(self,address=gyro_addr,full_scale=250):
 		Sensor.__init__(self, address, gyro_x_low)
 		self.full_scale = full_scale
-		#self.x_offset, self.y_offset, self.z_offmagnetometerset = offsets
 		self.sensitivity = gyro_scale_map[full_scale][1]
-		self.setReg()
-		self.getRaw()
+		#self.setReg()
+		self.calcOffsets()
+		
 
-	def setOffsets(self,offsets):
-		self.x_offset, self.y_offset, self.z_offset = offsets
 
 	def setReg(self):
 		#set control registers
@@ -79,13 +85,11 @@ class Gyroscope(Sensor):
 ##################################
 
 class Accelerometer(Sensor):
-	def __init__(self,offsets,measurement_range=2,address=accel_addr):
+	def __init__(self,measurement_range=2,address=accel_addr):
 		Sensor.__init__(self, address, accel_x_low)
-		#super(Accelerometer,self).setLowHigh(registers) Evan: leftover from old code architecture?
-		self.x_offset, self.y_offset, self.z_offset = offsets
 		self.measurement_range = measurement_range
-		self.setReg()
-		self.getRaw()
+		#self.setReg()
+		self.calcOffsets()
 
 	def setReg(self):
 		#set control registers
@@ -96,8 +100,8 @@ class Accelerometer(Sensor):
 
 class IMU(object):
 	def __init__(self):
-		IMUInit();
-		self.accel = Accelerometer(accel_offsets)  #all other arguments default
+		#IMUInit();
+		self.accel = Accelerometer()  #all other arguments default
 		self.gyro = Gyroscope()
 		
 	@property
@@ -144,6 +148,6 @@ class IMU(object):
 
 
 if __name__=="__main__":
-	sens = Sensor(0,0)
-	print sens.getRaw()
+	imu = IMU()
+	
 
