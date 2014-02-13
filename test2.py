@@ -5,6 +5,8 @@ from imu import IMU
 from robovero.extras import roboveroConfig
 import time
 from ComplementaryFilter import ComplementaryFilter
+from motor import Motor
+from PID import PIDControl
 
 
 #set addresses for each sensor
@@ -18,6 +20,13 @@ imu=IMU()
 #imu.calibrate(0, 0, -1)
 cfRoll=ComplementaryFilter()
 cfPitch=ComplementaryFilter()
+motor1 = Motor(1)
+motor2 = Motor(2)
+motor3 = Motor(3)
+motor4 = Motor(4)
+pidPitch = PIDControl(0, 1)
+pidRoll = PIDControl(0, 1)
+
 #registers is list of three tuples for registers [(xlow,xhigh),(ylow,yhigh), etc]
 string = ""
 
