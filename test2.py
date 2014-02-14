@@ -36,8 +36,3 @@ while(1):
 	string += "\nfrom filter Roll: " + str(cfRoll.filter(imu.roll_angle, imu.roll_rate))
 	string += "\nfrom filter Pitch: " + str(cfPitch.filter(imu.pitch_angle, imu.pitch_rate)) 
 	print string
-
-
-
-
-

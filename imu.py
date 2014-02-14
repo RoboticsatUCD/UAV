@@ -7,7 +7,7 @@ from registers import *
 from I2C import I2CDevice
 from I2C import twosComplement as tc
 
-#from robovero.arduino import pinMode, digitalWrite, P1_0, OUTPUT
+from robovero.arduino import pinMode, digitalWrite, P1_0, OUTPUT
 def IMUInit():
   #Enable IMU by pulling IMU_EN lowx
   pinMode(P1_0, OUTPUT)
@@ -46,6 +46,7 @@ class Sensor(I2CDevice):  #I2CDevice
 		return super(Sensor,self).read6Reg(self.x_low) #
 		
 	def setOffsets(self,offsets=[0,0,0]):
+		offsets[2] = 16384 + offsets[2]
 		print offsets
 		self.x_offset, self.y_offset, self.z_offset = offsets
 
@@ -96,6 +97,7 @@ class Accelerometer(Sensor):
 
 class IMU(object):
 	def __init__(self):
+		IMUInit();
 		self.accel = Accelerometer()  #all other arguments default
 		self.gyro = Gyroscope()
 		
