@@ -9,10 +9,6 @@ from motor import Motor
 from PID import PIDControl
 
 
-#set addresses for each sensor
-
-
-# Initialize pin select registers
 roboveroConfig()
 
 # Initialize IMU
@@ -22,7 +18,7 @@ cfRoll=ComplementaryFilter()
 cfPitch=ComplementaryFilter()
 motor1 = Motor(1)
 motor2 = Motor(2)
-motor3 = Motor(3)
+motor3 = Motor(5)
 motor4 = Motor(4)
 pidPitch = PIDControl(0, 1)
 pidRoll = PIDControl(0, 1)
