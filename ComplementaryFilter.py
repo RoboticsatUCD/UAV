@@ -6,8 +6,8 @@
 import time
 class ComplementaryFilter(object):
 	def __init__(self,alpha=0.9,init_angle=0):
-		self.alpha=alpha
-		self.angle=init_angle
+		self.alpha = alpha
+		self.angle = init_angle
 		self.t1 = time.time()
 
 	def filter(self,accel_angle,gyro_rate):#should call once for each axis

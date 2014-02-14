@@ -4,8 +4,8 @@ import time
 import math
 import random
 from registers import *
-#from I2C import I2CDevice
-#from I2C import twosComplement as tc
+from I2C import I2CDevice
+from I2C import twosComplement as tc
 
 #from robovero.arduino import pinMode, digitalWrite, P1_0, OUTPUT
 def IMUInit():
@@ -19,14 +19,10 @@ def IMUReset():
   digitalWrite(P1_0, 1)
   digitalWrite(P1_0, 0)
 
-def twosComplement(low_byte, high_byte):
-			"""Unpack 16-bit twos complement representation of the result.
-			"""
-			return (((low_byte + (high_byte << 8)) + 2**15) % 2**16 - 2**15)
 
-class Sensor(object):  #I2CDevice   
+class Sensor(I2CDevice):  #I2CDevice   
 	def __init__(self, address, x_low):
-		#I2CDevice.__init__(self, address)
+		I2CDevice.__init__(self, address)
 		self.x_low = x_low
 		self.time_of_call = time.time() #must be initially set for the first rawValue call
 		self.rawValues = self.getRaw()
@@ -42,12 +38,12 @@ class Sensor(object):  #I2CDevice
 		#if threshold time has passed update raw sensor values
 		if (time.time() - self.time_of_call > 0.0001): #TODO DEFINE
 			self.rawValues = self.getRaw() 
-		return twosComplement(self.rawValues[index], self.rawValues[index +1])
+		return tc(self.rawValues[index], self.rawValues[index +1])
   
 	def getRaw(self):
 		self.time_of_call = time.time()
 		#super() with no arguments can be used in python 3
-		return self.read6Reg_fake(self.x_low) #super(Sensor,self)
+		return super(Sensor,self).read6Reg(self.x_low) #
 		
 	def setOffsets(self,offsets=[0,0,0]):
 		print offsets
@@ -70,7 +66,7 @@ class Gyroscope(Sensor):
 		Sensor.__init__(self, address, gyro_x_low)
 		self.full_scale = full_scale
 		self.sensitivity = gyro_scale_map[full_scale][1]
-		#self.setReg()
+		self.setReg()
 		self.calcOffsets()
 		
 
@@ -88,7 +84,7 @@ class Accelerometer(Sensor):
 	def __init__(self,measurement_range=2,address=accel_addr):
 		Sensor.__init__(self, address, accel_x_low)
 		self.measurement_range = measurement_range
-		#self.setReg()
+		self.setReg()
 		self.calcOffsets()
 
 	def setReg(self):
@@ -100,7 +96,6 @@ class Accelerometer(Sensor):
 
 class IMU(object):
 	def __init__(self):
-		#IMUInit();
 		self.accel = Accelerometer()  #all other arguments default
 		self.gyro = Gyroscope()
 		
