@@ -3,56 +3,67 @@ Created on Aug 15, 2013
 
 @author: ejracah
 '''
+
+"""from imu import IMU
+from sensor_class import Sensor"""
+
 from imu import IMU
-from sensor_class import Sensor
+from robovero.extras import roboveroConfig
+import time
+from ComplementaryFilter import ComplementaryFilter
+from motor import Motor
+from PID import PIDControl
+import signal
+import sys
+
+roboveroConfig()
+
+# Initialize IMU
+imu = IMU()
+#imu.calibrate(0, 0, -1)
+cfRoll = ComplementaryFilter(0.9, 0)
+cfPitch = ComplementaryFilter(0.9, 0)
+
+motor1 = Motor(1)
+motor2 = Motor(6)
+motor3 = Motor(5)
+motor4 = Motor(4)
+motors = [motor1, motor2, motor3, motor4]
+
+pitchPID = PIDControl(0, 0.168, 0.654 ,0.008)
+rollPID = PIDControl(0, 0.168, 0.654 ,0.008)
+
+def signal_handler(signal, frame):
+    print 'You pressed Ctrl+C!'
+    sys.exit(0)
+    for m in motors:
+    	mot.setSpeed(0)
+    	mot.go()
+signal.signal(signal.SIGINT, signal_handler)
 
 
-#instantiate gyro, accel and compass objects then pass them to IMU
-gyro=sensor(......)
-accel=sensor(.....)
-compass=sensor(.....)
+while(1):
+	rollAngle = cfRoll.filter(imu.roll_angle, imu.roll_rate)
+	pitchAngle = cfPitch.filter(imu.pitch_angle, imu.pitch_rate)
+	
+	pitchU = (pitchPID.update(pitchAngle) / 2)
+	rollU = (rollPID.update(rollAngle) / 2)
+	
+	throttle = 200
+	#Set motor speeds
+	motor1.setSpeed(throttle + pitchU)
+	motor2.setSpeed(throttle + rollU)
+	motor3.setSpeed(throttle - pitchU)
+	motor4.setSpeed(throttle - rollU)
 
-delay=10
-IMU.delayms=delay
-MyImu=IMU(accel,compass,gyro)
-MyKalman=KalmanFilter(....)
-#@todo: interface with throttle
-    #clean up
-motor1=motor(....)
+	print "pitchU: ", pitchU, " rollU: " , rollU
+	print "pitch angle: ", pitchAngle, " roll angle: " , rollAngle
+	
 
-.
-.
-.
-motor4-motor(....)
-motors=[motor1,motor2,motor3,motor4]
-RollPID=PID(.....)
-PitchPID=PID(.....)
-#set setpoint roll and pitch pid's to 0
+	#Start Motors
+	for mot in motors:
+	    mot.go()
 
-#loop
-#Kalman Measure
-MyKalman.measure([myIMU.roll,myIMU.pitch]
-rollAngle,pitchAngle=myKalman.getAngles()
+	time.sleep(0.001)
 
-#Get control inputs
-rollPID.update(rollAngle)
-pitchPID.update(pitchAngle)
-pitchU=pitchPid.getinput/2
-rollU=rollPid.getInput/2
 
-#Set motor speeds
-motor1.setSpeed(throttle+pitchU)
-motor2.setSpeed(throttle+rollU)
-motor3.setSpeed(throttle-pitchU)
-motor4.setSpeed(throttle-rollU)
-
-#Start Motors
-for mot in motors:
-    mot.go()
-
-#Kalman Prediction
-MyKalman.predict()?
-time.sleep(delay)
-
-#delay 10 ms
-#repeat
