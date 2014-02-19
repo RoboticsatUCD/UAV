@@ -15,8 +15,8 @@ class PIDControl(object):
         self.error_total = 0
         self.error = 0
         self.error_prev = 0
-        self.max_error = 500
-        self.min_error = -500
+        self.max_error = 1000
+        self.min_error = -1000
 
     def update(self,measurement):
         self.error = max(min((self.setpoint - measurement), self.max_error), self.min_error)
@@ -30,7 +30,7 @@ class PIDControl(object):
         self.I = self.Ki * self.error_total * self.dt
         self.D = self.Kd * self.de / self.dt
         
-        u=self.P + self.I + self.D
+        u = self.P + self.I + self.D
         
         return u
 

@@ -5,7 +5,7 @@ from imu import IMU
 from robovero.extras import roboveroConfig
 import time
 from ComplementaryFilter import ComplementaryFilter
-#from motor import Motor
+from motor import Motor
 from PID import PIDControl
 
 
@@ -16,12 +16,13 @@ imu = IMU()
 #imu.calibrate(0, 0, -1)
 cfRoll = ComplementaryFilter(0.9, 0)
 cfPitch = ComplementaryFilter(0.9, 0)
-"""
+
 motor1 = Motor(1)
-motor2 = Motor(2)
+motor2 = Motor(6)
 motor3 = Motor(5)
 motor4 = Motor(4)
-"""
+motors = [motor1, motor2, motor3, motor4]
+
 #pidPitch = PIDControl(0, 1)
 #pidRoll = PIDControl(0, 1)
 
@@ -35,4 +36,11 @@ while(1):
 	string += "\nPitch rate: " + str(imu.pitch_rate)
 	string += "\nfrom filter Roll: " + str(cfRoll.filter(imu.roll_angle, imu.roll_rate))
 	string += "\nfrom filter Pitch: " + str(cfPitch.filter(imu.pitch_angle, imu.pitch_rate)) 
+	
+	speed = int(raw_input('Speed?'))
+	for motore in motors:
+		motore.setSpeed(speed)
+		motore.go()
+
 	print string
+	

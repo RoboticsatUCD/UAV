@@ -10,6 +10,7 @@ from robovero.extras import roboveroConfig, initMatch
 from robovero.lpc_types import FunctionalState
 
 from robovero.arduino import analogWrite, PWM1
+import time
 
 def initPulse(channel, pulse_width):
     initMatch(channel, pulse_width)
@@ -36,9 +37,13 @@ class Motor(object):
         else:
             PWM_ChannelCmd(LPC_PWM1, port_number, FunctionalState.ENABLE)
             print "Motor initialized!"
+        time.sleep(0.2)
+        PWM_MatchUpdate(LPC_PWM1, self.port, 2000, PWM_MATCH_UPDATE_OPT.PWM_MATCH_UPDATE_NEXT_RST)
+        time.sleep(0.2)
+        PWM_MatchUpdate(LPC_PWM1, self.port, 1000, PWM_MATCH_UPDATE_OPT.PWM_MATCH_UPDATE_NEXT_RST)
 
     def setSpeed(self,speed):
-        if speed<=self.max_speed or speed>=self.min_speed:
+        if speed <= self.max_speed or speed >= self.min_speed:
             self.speed=speed
         else:
             print "Invalid speed of: " + speed + ", using previous speed of: " + self.speed
