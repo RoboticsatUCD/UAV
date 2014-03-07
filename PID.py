@@ -6,33 +6,40 @@ Created on Aug 20, 2013
 import time
 
 class PIDControl(object):
-    def __init__(self,setpoint,Kp,Ki=0,Kd=0):
+    def __init__(self,setpoint,coefficients):
         self.setpoint = setpoint
-        self.t1 = time.time()
-        self.Kp = Kp
-        self.Kd = Kd
-        self.Ki = Ki
-        self.error_total = 0
-        self.error = 0
-        self.error_prev = 0
-        self.max_error = 1000
-        self.min_error = -1000
+        self.lastTime = time.time()
+        self.kP, self.kI, self.kD = coefficients
+        self.errorTotal = 0.0
+        self.previousError = 0.0
+        self.max_error = 180
+        self.min_error = -180
 
-    def update(self,measurement):
-        self.error = max(min((self.setpoint - measurement), self.max_error), self.min_error)
-        self.errorTotal = self.error_total + self.error
-        self.de = self.error - self.error_prev
-        self.error_prev = self.error
-        self.dt = time.time() - self.t1
-        t1 = time.time()
+    def update(self, measurement):
 
-        self.P = self.Kp * self.error
-        self.I = self.Ki * self.error_total * self.dt
-        self.D = self.Kd * self.de / self.dt
+        #get new time interval
+        self.now = time.time()
+        self.timeInterval = self.now - self.lastTime
         
-        u = self.P + self.I + self.D
+        #calculate error terms
+        self.error = min(self.setpoint - measurement
+        self.errorTotal += self.error * self.timeInterval
+        self.dError = (self.error - self.previousError) / timeInterval
         
-        return u
+        
+      
+        #calculate the three PID terms
+        self.P = self.kP * self.error
+        self.I = self.kI * self.errorTotal * self.timeInterval
+        self.D = self.kD * (self.dError / self.timeInterval)
+
+        #set new previous termsp
+        self.lastTime = self.now
+        self.previousError = self.error
+        
+      
+        
+        return self.P + self.I + self.D
 
     def set_set_point(self,setpoint):
-        self.setpoint=setpoint
+        self.setpoint = setpoint
