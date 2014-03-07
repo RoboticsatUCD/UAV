@@ -22,7 +22,7 @@ class PIDControl(object):
         self.timeInterval = self.now - self.lastTime
         
         #calculate error terms
-        self.error = min(self.setpoint - measurement
+        self.error = self.setpoint - measurement
         self.errorTotal += self.error * self.timeInterval
         self.dError = (self.error - self.previousError) / timeInterval
         
