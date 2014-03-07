@@ -29,18 +29,21 @@ class Motor(object):
             Motor.initialized=1
             initPeriod(20000)
             initPulse(port_number, 1000)
-            PWM_ChannelCmd(LPC_PWM1, port_number, FunctionalState.ENABLE)
+            print "PWM module + motor initialized!"
+        else:
+            Motor.initialized += 1
+            initPulse(port_number, 1000)
+            print "Motor initialized!"
+        PWM_ChannelCmd(LPC_PWM1, port_number, FunctionalState.ENABLE)
+        if(Motor.initialized == 4):
+            print "Done initializing!"
+           # PWM_ChannelCmd(LPC_PWM1, 1, FunctionalState.ENABLE)
+           # PWM_ChannelCmd(LPC_PWM1, 6, FunctionalState.ENABLE)
+           # PWM_ChannelCmd(LPC_PWM1, 5, FunctionalState.ENABLE)
+           # PWM_ChannelCmd(LPC_PWM1, 4, FunctionalState.ENABLE)
             PWM_ResetCounter(LPC_PWM1)
             PWM_CounterCmd(LPC_PWM1, FunctionalState.ENABLE)
             PWM_Cmd(LPC_PWM1, FunctionalState.ENABLE)
-            print "PWM module + motor initialized!"
-        else:
-            PWM_ChannelCmd(LPC_PWM1, port_number, FunctionalState.ENABLE)
-            print "Motor initialized!"
-        time.sleep(0.2)
-        PWM_MatchUpdate(LPC_PWM1, self.port, 2000, PWM_MATCH_UPDATE_OPT.PWM_MATCH_UPDATE_NEXT_RST)
-        time.sleep(0.2)
-        PWM_MatchUpdate(LPC_PWM1, self.port, 1000, PWM_MATCH_UPDATE_OPT.PWM_MATCH_UPDATE_NEXT_RST)
 
     def setSpeed(self,speed):
         if speed <= self.max_speed or speed >= self.min_speed:

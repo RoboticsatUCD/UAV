@@ -30,6 +30,14 @@ motor3 = Motor(5)
 motor4 = Motor(4)
 motors = [motor1, motor2, motor3, motor4]
 
+for m in motors:
+   m.setSpeed(1000)
+   m.go()
+   time.sleep(1)
+   m.setSpeed(0)
+   m.go()
+
+
 pitchPID = PIDControl(0, [0.168, 0.654 ,0.008])
 rollPID = PIDControl(0, [0.168, 0.654 ,0.008])
 
@@ -37,8 +45,8 @@ def signal_handler(signal, frame):
     print 'You pressed Ctrl+C!'
     sys.exit(0)
     for m in motors:
-    	mot.setSpeed(0)
-    	mot.go()
+        m.setSpeed(0)
+        m.go()
 signal.signal(signal.SIGINT, signal_handler)
 
 
