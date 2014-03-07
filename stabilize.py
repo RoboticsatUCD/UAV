@@ -30,8 +30,8 @@ motor3 = Motor(5)
 motor4 = Motor(4)
 motors = [motor1, motor2, motor3, motor4]
 
-pitchPID = PIDControl(0, 0.168, 0.654 ,0.008)
-rollPID = PIDControl(0, 0.168, 0.654 ,0.008)
+pitchPID = PIDControl(0, [0.168, 0.654 ,0.008])
+rollPID = PIDControl(0, [0.168, 0.654 ,0.008])
 
 def signal_handler(signal, frame):
     print 'You pressed Ctrl+C!'
