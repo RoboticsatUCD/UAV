@@ -35,7 +35,7 @@ class Motor(object):
             initPulse(port_number, 1000)
             print "Motor initialized!"
         PWM_ChannelCmd(LPC_PWM1, port_number, FunctionalState.ENABLE)
-        if(Motor.initialized == 4):
+        if(Motor.initialized == 2):
             print "Done initializing!"
            # PWM_ChannelCmd(LPC_PWM1, 1, FunctionalState.ENABLE)
            # PWM_ChannelCmd(LPC_PWM1, 6, FunctionalState.ENABLE)

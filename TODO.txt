@@ -1,8 +1,3 @@
-1) keep sensor class,
-2) make magnetometer class, overriding get_raw
-3) do filter class
-4) define sensor threshold
-5) figure out how to encode indexes for IMU rawValue()
-
 Abhinav:
-1) take look at motor class
+1) Expand second thread and make throttle settable dynamically at run-time
+2) research ESC's to see if they are closed-loop controllers (precise speeds or no)
