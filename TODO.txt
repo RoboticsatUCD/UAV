@@ -1,3 +1,8 @@
 Abhinav:
 1) Expand second thread and make throttle settable dynamically at run-time
 2) research ESC's to see if they are closed-loop controllers (precise speeds or no)
+
+Evan:
+1) PID Tuning/Testing to make sure stable at 900+
+2) Look into height control algo (using PING ultrasonic)
+3) Add decal to UAV
