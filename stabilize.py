@@ -26,11 +26,11 @@ imu = IMU()
 cfRoll = ComplementaryFilter(0.9, 0)
 cfPitch = ComplementaryFilter(0.9, 0)
 
-motor1 = Motor(1)
+#motor1 = Motor(5)
 #motor2 = Motor(6)
-motor3 = Motor(5)
+motor3 = Motor(1)
 #motor4 = Motor(4)
-motors = [motor1, motor3]
+motors = [motor3]
 
 for m in motors:
    m.setSpeed(1000)
@@ -70,7 +70,7 @@ while(1):
 	
 	throttle = 400
 	#Set motor speeds
-	motor1.setSpeed(throttle + pitchU)
+	#motor1.setSpeed(throttle + pitchU)
 	#motor2.setSpeed(throttle + rollU)
 	motor3.setSpeed(throttle - pitchU)
 	#motor4.setSpeed(throttle - rollU)
