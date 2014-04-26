@@ -27,9 +27,7 @@ class Motor(object):
         self.max_speed=vmax      
        
         initPulse(port_number, 1000)
-        
         PWM_ChannelCmd(LPC_PWM1, port_number, FunctionalState.ENABLE)
-        
         initPeriod(20000)
         PWM_ResetCounter(LPC_PWM1)
         PWM_CounterCmd(LPC_PWM1, FunctionalState.ENABLE)
