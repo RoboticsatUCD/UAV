@@ -24,9 +24,7 @@ class Motor(object):
         self.port=port_number
         self.speed=speed
         self.min_speed=vmin
-        self.max_speed=vmax
-<<<<<<< HEAD
-      
+        self.max_speed=vmax      
        
         initPulse(port_number, 1000)
         
@@ -37,7 +35,6 @@ class Motor(object):
         PWM_CounterCmd(LPC_PWM1, FunctionalState.ENABLE)
         PWM_Cmd(LPC_PWM1, FunctionalState.ENABLE)
 
-=======
         if(Motor.initialized==0):
             Motor.initialized=1
             initPeriod(20000)
@@ -48,23 +45,10 @@ class Motor(object):
             initPulse(port_number, 1000)
             print "Motor initialized!"
         PWM_ChannelCmd(LPC_PWM1, port_number, FunctionalState.ENABLE)
-<<<<<<< HEAD
        
         PWM_ResetCounter(LPC_PWM1)
         PWM_CounterCmd(LPC_PWM1, FunctionalState.ENABLE)
         PWM_Cmd(LPC_PWM1, FunctionalState.ENABLE)
->>>>>>> master
-=======
-        if(Motor.initialized == 2):
-            print "Done initializing!"
-           # PWM_ChannelCmd(LPC_PWM1, 1, FunctionalState.ENABLE)
-           # PWM_ChannelCmd(LPC_PWM1, 6, FunctionalState.ENABLE)
-           # PWM_ChannelCmd(LPC_PWM1, 5, FunctionalState.ENABLE)
-           # PWM_ChannelCmd(LPC_PWM1, 4, FunctionalState.ENABLE)
-            PWM_ResetCounter(LPC_PWM1)
-            PWM_CounterCmd(LPC_PWM1, FunctionalState.ENABLE)
-            PWM_Cmd(LPC_PWM1, FunctionalState.ENABLE)
->>>>>>> parent of c70369e... in the process of cleaning up motor class. try this boris
 
     def setSpeed(self,speed):
         if speed <= self.max_speed or speed >= self.min_speed:

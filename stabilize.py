@@ -26,8 +26,6 @@ imu = IMU()
 cfRoll = ComplementaryFilter(0.9, 0)
 cfPitch = ComplementaryFilter(0.9, 0)
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 m = Motor(1)
 #motor2 = Motor(6)
 #motor3 = Motor(5)
@@ -41,22 +39,6 @@ time.sleep(1)
 m.setSpeed(0)
 m.go()
 time.sleep(1)
-
-=======
-#motor1 = Motor(5)
-=======
-motor1 = Motor(1)
->>>>>>> parent of c70369e... in the process of cleaning up motor class. try this boris
-#motor2 = Motor(6)
-motor3 = Motor(5)
-#motor4 = Motor(4)
-<<<<<<< HEAD
-motors = [motor3]
->>>>>>> master
-=======
-motors = [motor1, motor3]
->>>>>>> parent of c70369e... in the process of cleaning up motor class. try this boris
-
 
 
 pitchPID = PIDControl(0, [0.168, 0.654 ,0.008])
@@ -89,15 +71,7 @@ except:
 	
 	#throttle = 400
 	#Set motor speeds
-<<<<<<< HEAD
-<<<<<<< HEAD
-	
-=======
 	#motor1.setSpeed(throttle + pitchU)
->>>>>>> master
-=======
-	motor1.setSpeed(throttle + pitchU)
->>>>>>> parent of c70369e... in the process of cleaning up motor class. try this boris
 	#motor2.setSpeed(throttle + rollU)
 	#motor3.setSpeed(throttle - pitchU)
 	#motor4.setSpeed(throttle - rollU)
