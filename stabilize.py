@@ -26,18 +26,29 @@ imu = IMU()
 cfRoll = ComplementaryFilter(0.9, 0)
 cfPitch = ComplementaryFilter(0.9, 0)
 
+<<<<<<< HEAD
+m = Motor(1)
+#motor2 = Motor(6)
+#motor3 = Motor(5)
+#motor4 = Motor(4)
+#motors = [motor1, motor1]
+
+#for m in motors:
+m.setSpeed(1000)
+m.go()
+time.sleep(1)
+m.setSpeed(0)
+m.go()
+time.sleep(1)
+
+=======
 #motor1 = Motor(5)
 #motor2 = Motor(6)
 motor3 = Motor(1)
 #motor4 = Motor(4)
 motors = [motor3]
+>>>>>>> master
 
-for m in motors:
-   m.setSpeed(1000)
-   m.go()
-   time.sleep(1)
-   m.setSpeed(0)
-   m.go()
 
 
 pitchPID = PIDControl(0, [0.168, 0.654 ,0.008])
@@ -61,18 +72,22 @@ try:
 except:
 	print "error: unable to start thread"
 
-while(1):
+#while(1):
 #	rollAngle = cfRoll.filter(imu.roll_angle, imu.roll_rate)
-	pitchAngle = cfPitch.filter(imu.pitch_angle, imu.pitch_rate)
+	#pitchAngle = cfPitch.filter(imu.pitch_angle, imu.pitch_rate)
 	
-	pitchU = (pitchPID.update(pitchAngle))
+	#pitchU = (pitchPID.update(pitchAngle))
 #	rollU = (rollPID.update(rollAngle))
 	
-	throttle = 400
+	#throttle = 400
 	#Set motor speeds
+<<<<<<< HEAD
+	
+=======
 	#motor1.setSpeed(throttle + pitchU)
+>>>>>>> master
 	#motor2.setSpeed(throttle + rollU)
-	motor3.setSpeed(throttle - pitchU)
+	#motor3.setSpeed(throttle - pitchU)
 	#motor4.setSpeed(throttle - rollU)
 
 #	print "pitchU: ", pitchU, " rollU: " , rollU
@@ -81,5 +96,8 @@ while(1):
         #print "Mot1: ", throttle +pitchU, " Mot2: ", throttle-pitchU
 
 	#Start Motors
-	for mot in motors:
-	    mot.go()
+for i in range(1000):
+	m.setSpeed(i)
+	m.go()
+time.sleep(5)
+	   
