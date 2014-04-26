@@ -25,7 +25,6 @@ class Motor(object):
         self.speed=speed
         self.min_speed=vmin
         self.max_speed=vmax      
-       
         initPulse(port_number, 1000)
         PWM_ChannelCmd(LPC_PWM1, port_number, FunctionalState.ENABLE)
         initPeriod(20000)
