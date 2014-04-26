@@ -24,25 +24,12 @@ class Motor(object):
         self.port=port_number
         self.speed=speed
         self.min_speed=vmin
-        self.max_speed=vmax      
+        self.max_speed=vmax
+        
         initPulse(port_number, 1000)
         PWM_ChannelCmd(LPC_PWM1, port_number, FunctionalState.ENABLE)
+        
         initPeriod(20000)
-        PWM_ResetCounter(LPC_PWM1)
-        PWM_CounterCmd(LPC_PWM1, FunctionalState.ENABLE)
-        PWM_Cmd(LPC_PWM1, FunctionalState.ENABLE)
-
-        if(Motor.initialized==0):
-            Motor.initialized=1
-            initPeriod(20000)
-            initPulse(port_number, 1000)
-            print "PWM module + motor initialized!"
-        else:
-            Motor.initialized += 1
-            initPulse(port_number, 1000)
-            print "Motor initialized!"
-        PWM_ChannelCmd(LPC_PWM1, port_number, FunctionalState.ENABLE)
-       
         PWM_ResetCounter(LPC_PWM1)
         PWM_CounterCmd(LPC_PWM1, FunctionalState.ENABLE)
         PWM_Cmd(LPC_PWM1, FunctionalState.ENABLE)
