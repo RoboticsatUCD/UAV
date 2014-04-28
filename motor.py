@@ -18,21 +18,35 @@ def initPulse(channel, pulse_width):
 def initPeriod(period):
     initMatch(0, period)
 
+def initMotors():
+    initPeriod(20000)
+    PWM_ResetCounter(LPC_PWM1)
+    PWM_CounterCmd(LPC_PWM1, FunctionalState.ENABLE)
+    PWM_Cmd(LPC_PWM1, FunctionalState.ENABLE)
+
+
+
 
 class Motor(object):
     def __init__(self,port_number,vmin=0,vmax=1000,speed=0):
-        self.port=port_number
-        self.speed=speed
-        self.min_speed=vmin
-        self.max_speed=vmax
-        
+        self.setDataMembers(port_number,vmin,vmax,speed)
         initPulse(port_number, 1000)
         PWM_ChannelCmd(LPC_PWM1, port_number, FunctionalState.ENABLE)
         
-        initPeriod(20000)
-        PWM_ResetCounter(LPC_PWM1)
-        PWM_CounterCmd(LPC_PWM1, FunctionalState.ENABLE)
-        PWM_Cmd(LPC_PWM1, FunctionalState.ENABLE)
+    def lowHighInit():
+        self.setSpeed(1000)
+        self.go()
+        time.sleep(1)
+        self.setSpeed(0)
+        self.go()
+        time.sleep(1)
+
+    def setDataMembers(port_number,vmin,vmax,speed):
+        self.port = port_number
+        self.speed = speed
+        self.min_speed = vmin
+        self.max_speed = vmax
+
 
     def setSpeed(self,speed):
         if speed <= self.max_speed or speed >= self.min_speed:

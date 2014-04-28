@@ -1,17 +1,15 @@
-'''
+"""
 Created on Aug 15, 2013
 
-@author: ejracah
-'''
+@author: Evan Racah
+"""
 
-"""from imu import IMU
-from sensor_class import Sensor"""
 
 from imu import IMU
 from robovero.extras import roboveroConfig
 import time
 from ComplementaryFilter import ComplementaryFilter
-from motor import Motor
+from motor import Motor, initMotors
 from PID import PIDControl
 import signal
 import sys
@@ -21,19 +19,16 @@ roboveroConfig()
 
 # Initialize IMU
 imu = IMU()
-
-#imu.calibrate(0, 0, -1)
 cfRoll = ComplementaryFilter(0.9, 0)
 cfPitch = ComplementaryFilter(0.9, 0)
 
-m = Motor(4)
+motors = [Motor(4)]
+initMotors()
 
-m.setSpeed(1000)
-m.go()
-time.sleep(1)
-m.setSpeed(0)
-m.go()
-time.sleep(1)
+for m in motors:
+	m.lowHighInit()
+
+
 
 
 pitchPID = PIDControl(0, [0.168, 0.654 ,0.008])
