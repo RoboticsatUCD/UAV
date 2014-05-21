@@ -1,5 +1,4 @@
 #Evan Racah, Boris Poutivski
-#from custom_servo import initPulse, initPeriod, initPWM
 #Expanded functionality from the motor.py class
 #Easier to work with imo, but redundant information in each instance of class
 #
@@ -11,6 +10,14 @@
 #mot3 = Motor(3)
 #mot1.initAll()
 #mot1.setSpeed(500) #half speed
+
+#If an unprogrammed controller is connected, use
+#Connect the controller in question to ground and signal pins on the input cable, but do not connect power
+#mot1 = Motor(1)
+#mot1.programController()
+#Connect the power cable to the controller within 20 seconds
+#Wait 20 seconds
+#The controller is now connected and configured
 
 
 from robovero.LPC17xx import LPC_PWM1
@@ -43,24 +50,28 @@ def initPWM():
 class Motor(object):
     motors = []
 
-    def __init__(self,port_number,vmin=0,vmax=1000,speed=0):
+    def __init__(self, port_number, vmin=0, vmax=1000, speed=0):
         motors.append(self)
         self.setDataMembers(port_number,vmin,vmax,speed)
         initPulse(port_number, 1000)
         PWM_ChannelCmd(LPC_PWM1, port_number, FunctionalState.ENABLE)
         
-    def initController():
-        self.setSpeed(1000)
-        time.sleep(1)
+    def initController(self):
         self.setSpeed(0)
-        time.sleep(1)
+    
+    def programController(self):
+        initPWM()
+        self.setSpeed(1000)
+        time.sleep(20)
+        self.setSpeed(0)
         
-    def initAll():
+    
+    def initAll(self):
         initPWM()
         for i in motors:
             i.initController()
 
-    def setDataMembers(port_number,vmin,vmax,speed):
+    def setDataMembers(self, port_number, vmin, vmax, speed):
         self.port = port_number
         self.speed = speed
         self.min_speed = vmin
