@@ -51,13 +51,15 @@ class Motor(object):
     motors = []
 
     def __init__(self, port_number, vmin=0, vmax=1000, speed=0):
-        motors.append(self)
+        self.motors.append(self)
         self.setDataMembers(port_number,vmin,vmax,speed)
+        initPeriod(20000)
         initPulse(port_number, 1000)
         PWM_ChannelCmd(LPC_PWM1, port_number, FunctionalState.ENABLE)
         
     def initController(self):
-        self.setSpeed(0)
+		print self.port
+		self.setSpeed(0)
     
     def programController(self):
         initPWM()
@@ -68,8 +70,10 @@ class Motor(object):
     
     def initAll(self):
         initPWM()
-        for i in motors:
+        for i in self.motors:
             i.initController()
+            print "Motor initialized"
+        time.sleep(4)
 
     def setDataMembers(self, port_number, vmin, vmax, speed):
         self.port = port_number
@@ -80,6 +84,6 @@ class Motor(object):
     def setSpeed(self,speed):
         if speed <= self.max_speed or speed >= self.min_speed:
             self.speed=speed
-            PWM_MatchUpdate(LPC_PWM1, self.port, self.speed+1000, PWM_MATCH_UPDATE_OPT.PWM_MATCH_UPDATE_NEXT_RST)
+            PWM_MatchUpdate(LPC_PWM1, self.port, self.speed+1000, PWM_MATCH_UPDATE_OPT.PWM_MATCH_UPDATE_NOW)
         else:
             print "Invalid speed of: " + speed + ", using previous speed of: " + self.speed
