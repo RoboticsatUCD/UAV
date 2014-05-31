@@ -24,11 +24,11 @@ from robovero.LPC17xx import LPC_PWM1, LPC_MCPWM
 from robovero.lpc17xx_pwm import PWM_TC_MODE_OPT, \
                     PWM_MATCH_UPDATE_OPT, PWM_MATCHCFG_Type, \
                     PWM_MatchUpdate, PWM_ConfigMatch, PWM_ChannelCmd, \
-                    PWM_ResetCounter, PWM_CounterCmd, PWM_Cmd, \
-                    MCPWM_Init, MCPWM_CHANNEL_CFG_Type, \
-                    MCPWM_ConfigChannel, MCPWM_DCMode, MCPWM_ACMode, \
-                    MCPWM_Start, MCPWM_WriteToShadow, MCPWM_Stop,    \
-                    MCPWM_CHANNEL_EDGE_MODE, MCPWM_CHANNEL_PASSIVE_HI, MCPWM_CHANNEL_PASSIVE_LO
+                    PWM_ResetCounter, PWM_CounterCmd, PWM_Cmd
+from robovero.lpc17xx_mcpwm import MCPWM_Init, MCPWM_CHANNEL_CFG_Type, \
+                      MCPWM_ConfigChannel, MCPWM_DCMode, MCPWM_ACMode, \
+                      MCPWM_Start, MCPWM_WriteToShadow, MCPWM_Stop,    \
+                      MCPWM_CHANNEL_EDGE_MODE, MCPWM_CHANNEL_PASSIVE_HI, MCPWM_CHANNEL_PASSIVE_LO
 from robovero.extras import roboveroConfig, initMatch
 from robovero.lpc_types import FunctionalState
 
@@ -74,16 +74,16 @@ class Motor(object):
     def __init__(self, portNumber, MC=False, vmin=0, vmax=1000, speed=0):
         self.motors.append(self) #Keeps track of all motors
         if MC:
-            self.setDataMembers(portNumber,MC,vmin,vmax,speed, setSpeedMC)
+            self.setDataMembers(portNumber,MC,vmin,vmax,speed)
             MCPWM_ConfigChannel(LPC_MCPWM, portNumber, channelsetup.ptr)
-        else
-            self.setDataMembers(portNumber,MC,vmin,vmax,speed, setSpeedNorm)
+        else:
+            self.setDataMembers(portNumber,MC,vmin,vmax,speed)
             initPeriod(20000)
-            initPulse(port_number, 1000)
+            initPulse(portNumber, 1000)
             PWM_ChannelCmd(LPC_PWM1, portNumber, ENABLE)
         
     def initController(self):
-        self.setSpeed(0)
+        self.setSpeedNorm(0)
     
     def programController(self):
         initPWM()
@@ -91,7 +91,6 @@ class Motor(object):
         time.sleep(20)
         self.setSpeed(0)
         
-    
     def initAll(self):
         initPWM()
         for i in self.motors:
@@ -99,13 +98,13 @@ class Motor(object):
             print "Motor initialized"
         time.sleep(4)
 
-    def setDataMembers(self, portNumber, MC, vmin, vmax, speed, updateCondition):
+    def setDataMembers(self, portNumber, MC, vmin, vmax, speed):
         self.port = portNumber
         self.MC = MC
         self.speed = speed
         self.minSpeed = vmin
         self.maxSpeed = vmax
-        self.updateFunction = function
+        #self.updateFunction = function
 
     def setSpeedNorm(self,speed):
         if speed <= self.maxSpeed or speed >= self.minSpeed:
