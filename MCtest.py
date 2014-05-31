@@ -39,16 +39,6 @@ roboveroConfig()
 MCPWM_Init(LPC_MCPWM)
 
 channelsetup = MCPWM_CHANNEL_CFG_Type()
-channelsetup2 = MCPWM_CHANNEL_CFG_Type()
-
-channelsetup2.channelType = MCPWM_CHANNEL_EDGE_MODE
-channelsetup2.channelPolarity = MCPWM_CHANNEL_PASSIVE_HI
-channelsetup2.channelDeadtimeEnable = DISABLE
-channelsetup2.channelDeadtimeValue = 0
-channelsetup2.channelUpdateEnable = ENABLE
-channelsetup2.channelTimercounterValue = 0
-channelsetup2.channelPeriodValue = periodValue
-channelsetup2.channelPulsewidthValue = 0
   
 channelsetup.channelType = MCPWM_CHANNEL_EDGE_MODE
 channelsetup.channelPolarity = MCPWM_CHANNEL_PASSIVE_HI
