@@ -60,6 +60,7 @@ def initPeriod(period):
 
 def initPWM(): #Initializes both the MCPWM and the regular PWM
     MCPWM_Init(LPC_MCPWM)
+    MCPWM_DCMode(LPC_MCPWM, DISABLE, DISABLE, (0))
     MCPWM_ACMode(LPC_MCPWM, DISABLE)
     MCPWM_Start(LPC_MCPWM, ENABLE, ENABLE, ENABLE) #Start all three channels, even if we're not using them I guess
     
@@ -70,20 +71,20 @@ def initPWM(): #Initializes both the MCPWM and the regular PWM
 
 class Motor(object):
     motors = []
-
+    
     def __init__(self, portNumber, MC=False, vmin=0, vmax=1000, speed=0):
         self.motors.append(self) #Keeps track of all motors
         if MC:
-            self.setDataMembers(portNumber,MC,vmin,vmax,speed)
+            self.setDataMembers(portNumber,MC,vmin,vmax,speed, self.setSpeedMC)
             MCPWM_ConfigChannel(LPC_MCPWM, portNumber, channelsetup.ptr)
         else:
-            self.setDataMembers(portNumber,MC,vmin,vmax,speed)
+            self.setDataMembers(portNumber,MC,vmin,vmax,speed,self.setSpeedNorm)
             initPeriod(20000)
             initPulse(portNumber, 1000)
             PWM_ChannelCmd(LPC_PWM1, portNumber, ENABLE)
         
     def initController(self):
-        self.setSpeedNorm(0)
+        self.setSpeed(0)
     
     def programController(self):
         initPWM()
@@ -98,23 +99,24 @@ class Motor(object):
             print "Motor initialized"
         time.sleep(4)
 
-    def setDataMembers(self, portNumber, MC, vmin, vmax, speed):
+    def setDataMembers(self, portNumber, MC, vmin, vmax, speed, myfunction):
         self.port = portNumber
         self.MC = MC
         self.speed = speed
         self.minSpeed = vmin
         self.maxSpeed = vmax
-        #self.updateFunction = function
+        self.updateFunction = myfunction
+        
+    def setSpeed(self,speed):
+		if speed <= self.maxSpeed or speed >= self.minSpeed:
+			self.updateFunction(speed)
+		else:
+			print "Invalid speed of: " + speed + ", using previous speed of: " + self.speed
 
     def setSpeedNorm(self,speed):
-        if speed <= self.maxSpeed or speed >= self.minSpeed:
-            self.speed=speed
-            PWM_MatchUpdate(LPC_PWM1, self.port, self.speed+1000, PWM_MATCH_UPDATE_OPT.PWM_MATCH_UPDATE_NOW)
-        else:
-            print "Invalid speed of: " + speed + ", using previous speed of: " + self.speed
+		self.speed=speed
+		PWM_MatchUpdate(LPC_PWM1, self.port, self.speed+1000, PWM_MATCH_UPDATE_OPT.PWM_MATCH_UPDATE_NOW)
     
     def setSpeedMC(self,speed):
-        if speed <= self.maxSpeed or speed >= self.minSpeed:
-            PWMvalue = speed*(periodValue/2000) + periodValue/20
-        else:
-            print "Invalid speed of: " + speed + ", using previous speed of: " + self.speed
+		channelsetup.channelPulsewidthValue = speed*(periodValue/20000) + periodValue/20
+		MCPWM_WriteToShadow(LPC_MCPWM, self.port, channelsetup.ptr)
