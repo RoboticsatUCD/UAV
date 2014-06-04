@@ -59,7 +59,6 @@ def initPeriod(period):
     initMatch(0, period)
 
 def initPWM(): #Initializes both the MCPWM and the regular PWM
-    MCPWM_Init(LPC_MCPWM)
     MCPWM_DCMode(LPC_MCPWM, DISABLE, DISABLE, (0))
     MCPWM_ACMode(LPC_MCPWM, DISABLE)
     MCPWM_Start(LPC_MCPWM, ENABLE, ENABLE, ENABLE) #Start all three channels, even if we're not using them I guess
@@ -75,13 +74,17 @@ class Motor(object):
     def __init__(self, portNumber, MC=False, vmin=0, vmax=1000, speed=0):
         self.motors.append(self) #Keeps track of all motors
         if MC:
-            self.setDataMembers(portNumber,MC,vmin,vmax,speed, self.setSpeedMC)
-            MCPWM_ConfigChannel(LPC_MCPWM, portNumber, channelsetup.ptr)
+			MCPWM_Init(LPC_MCPWM)
+			self.setDataMembers(portNumber,MC,vmin,vmax,speed,self.setSpeedMC)
+			MCPWM_ConfigChannel(LPC_MCPWM, portNumber, channelsetup.ptr)
         else:
             self.setDataMembers(portNumber,MC,vmin,vmax,speed,self.setSpeedNorm)
             initPeriod(20000)
             initPulse(portNumber, 1000)
             PWM_ChannelCmd(LPC_PWM1, portNumber, ENABLE)
+            
+    def __del__(self):
+		MCPWM_Stop(LPC_MCPWM, ENABLE, ENABLE, ENABLE)
         
     def initController(self):
         self.setSpeed(0)

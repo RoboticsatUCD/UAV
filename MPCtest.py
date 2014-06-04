@@ -64,5 +64,4 @@ try:
     channelsetup.channelPulsewidthValue = getMotorSpeed()
     MCPWM_WriteToShadow(LPC_MCPWM, 0, channelsetup.ptr)
 except:
-  MCPWM_Stop(LPC_MCPWM, ENABLE, DISABLE, DISABLE)
   print "you broke it"
