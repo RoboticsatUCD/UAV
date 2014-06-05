@@ -11,6 +11,8 @@ class PIDControl(object):
         self.kP, self.kI, self.kD = coefficients
         self.errorTotal = 0.0
         self.previousError = 0.0
+        #self.avgtime = 0
+        #self.repeats = 0
         #self.max_error = 180
         #self.min_error = -180
 
@@ -18,6 +20,8 @@ class PIDControl(object):
         #update time stuff
         self.now = time.time()
         self.timeInterval = self.now - self.lastTime
+        #self.avgtime = (self.avgtime * self.repeats + self.timeInterval)/(self.repeats + 1)
+        #self.repeats += 1
 
         #calculate the three error terms
         self.error = self.setpoint - measurement
