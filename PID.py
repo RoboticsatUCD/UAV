@@ -24,9 +24,9 @@ class PIDControl(object):
         #self.repeats += 1
 
         #calculate the three error terms
-        self.error = self.setpoint - measurement
-        self.errorTotal += self.error * self.timeInterval
-        self.dError = (self.error - self.previousError) / self.timeInterval
+        self.error = self.setpoint - measurement #Proportional term
+        self.errorTotal += self.error * self.timeInterval #Integral term
+        self.dError = (self.error - self.previousError) / self.timeInterval #Derivative term
 
         #multiply by coefficents
         P = self.kP * self.error

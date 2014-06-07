@@ -32,7 +32,7 @@ cfRoll = ComplementaryFilter(0.9, 0)
 cfPitch = ComplementaryFilter(0.9, 0)
 
 pitchPID = PIDControl(0, [0.168, 0.654 ,0.008])
-rollPID = PIDControl(0, [1, 0 ,0])
+rollPID = PIDControl(0, [0.5, 0.5 ,0])
 
 def signal_handler(signal, frame):
     print 'You pressed Ctrl+C!'
